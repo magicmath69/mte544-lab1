@@ -25,6 +25,15 @@ from rclpy.time import Time
 CIRCLE=0; SPIRAL=1; ACC_LINE=2
 motion_types=['circle', 'spiral', 'line']
 
+# Motion parameters, tune these so the robot fits in the available space.
+# MAX_LIN_VEL is kept under the TurtleBot3 Burger limit (0.22 m/s) so the same values work in sim and on the TurtleBot4
+TIMER_PERIOD=0.1            # [s] period of timer_callback, i.e. time between two velocity commands
+MAX_LIN_VEL=0.2             # [m/s] linear velocity of the circle, and the cap for the spiral and the line
+CIRCLE_ANG_VEL=0.4          # [rad/s] circle radius is MAX_LIN_VEL/CIRCLE_ANG_VEL = 0.5 m
+SPIRAL_ANG_VEL=0.4          # [rad/s] spiral stops growing at radius MAX_LIN_VEL/SPIRAL_ANG_VEL = 0.5 m
+SPIRAL_RADIUS_RATE=0.01     # [m/s] how fast the spiral radius grows
+LINE_ACC=0.02               # [m/s^2] acceleration along the line
+
 class motion_executioner(Node):
     
     def __init__(self, motion_type=0):
@@ -34,7 +43,8 @@ class motion_executioner(Node):
         self.type=motion_type
         
         self.radius_=0.0
-        
+        self.lin_vel_=0.0
+
         self.successful_init=False
         self.imu_initialized=False
         self.odom_initialized=False
@@ -71,7 +81,7 @@ class motion_executioner(Node):
         # LaserScan subscription
         self.laser_sub=self.create_subscription(LaserScan, '/scan', self.laser_callback, qos)
         
-        self.create_timer(0.1, self.timer_callback)
+        self.create_timer(TIMER_PERIOD, self.timer_callback)
 
 
     # TODO Part 5: Callback functions: complete the callback functions of the three sensors to log the proper data.
@@ -136,17 +146,29 @@ class motion_executioner(Node):
     def make_circular_twist(self):
         
         msg=Twist()
-        ... # fill up the twist msg for circular motion
+        # Constant linear and angular velocity gives a circle of radius v/w,
+        # positive angular.z turns the robot counter-clockwise
+        msg.linear.x=MAX_LIN_VEL
+        msg.angular.z=CIRCLE_ANG_VEL
         return msg
 
     def make_spiral_twist(self):
         msg=Twist()
-        ... # fill up the twist msg for spiral motion
+        # Constant angular velocity with a radius that grows on every timer tick: since v = r*w
+        # the linear velocity ramps up and the circle opens into a spiral.
+        # Once v reaches MAX_LIN_VEL the radius stops growing and the robot holds that circle
+        self.radius_=min(self.radius_+SPIRAL_RADIUS_RATE*TIMER_PERIOD, MAX_LIN_VEL/SPIRAL_ANG_VEL)
+        msg.linear.x=self.radius_*SPIRAL_ANG_VEL
+        msg.angular.z=SPIRAL_ANG_VEL
         return msg
-    
+
     def make_acc_line_twist(self):
         msg=Twist()
-        ... # fill up the twist msg for line motion
+        # No angular velocity keeps the robot straight, the linear velocity is increased on every
+        # timer tick to get a constant acceleration until it saturates at MAX_LIN_VEL
+        self.lin_vel_=min(self.lin_vel_+LINE_ACC*TIMER_PERIOD, MAX_LIN_VEL)
+        msg.linear.x=self.lin_vel_
+        msg.angular.z=0.0
         return msg
 
 import argparse
