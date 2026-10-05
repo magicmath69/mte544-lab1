@@ -24,7 +24,9 @@ class Logger:
             vals_str=""
 
             # TODO Part 5: Write the values from the list to the file
-            ...
+            for value in values_list:
+                vals_str += str(value)   # inf/nan are written as 'inf'/'nan'; float() reads them back
+                vals_str += ", "
             
             vals_str+="\n"
             
@@ -60,8 +62,9 @@ class FileReader:
 
                     read_headers=True
                     break
-            
-            next(file)
+
+            # apparantly this line is unnessessary? looks like a copy error
+            # next(file)
             
             # Read each line and extract values
             for line in file:
