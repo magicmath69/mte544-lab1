@@ -38,9 +38,13 @@ This is the late-loop radius, not a single radius for the entire spiral.
 The map plot preserves PGM pixel values and YAML metric extent. Gray 205 is
 labelled separately from confirmed free and occupied pixels. The supplied YAML
 `free_thresh: 0.25` is greater than `(255-205)/255`; the official Nav2 Humble
-trinary loader would therefore classify these pixels as free. This is discussed
-as a source metadata limitation, without changing the supplied map files.
+trinary loader would therefore classify these pixels as free. This remains a
+source metadata limitation; the supplied map files have not been changed.
 Primary implementation: https://github.com/ros-navigation/navigation2/blob/humble/nav2_map_server/src/map_io.cpp
+
+The report's brief map description names the ROS 2 SLAM, RViz, and Nav2 map-saver
+workflow documented in the lab instructions. The robot's bottom-right location
+was supplied by Joe; the saved PGM does not independently record the robot pose.
 
 Course reference checked for interpretation: Sensing and Measurements I,
 odometry, gyroscope, and accelerometer sections. The report follows the lab

@@ -4,13 +4,13 @@ Figure~\ref{fig:imu} shows logged IMU-frame accelerations (specific force) and $
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{figures/imu_results.pdf}
-\caption{Unsmoothed IMU samples on shared scales. Acceleration uses the left axes and angular rate the right; elapsed time starts at each file's first timestamp.}
+\caption{Raw IMU samples on shared scales; acceleration uses left axes and angular rate right. Fluctuations may include motion and measurement effects.}
 \label{fig:imu}
 \end{figure}
 
 \clearpage
-\textbf{Circle:} Mean $\omega_z$ is $0.402$~rad/s over 2--15~s of the 15.81~s recording, showing sustained turning after startup.
+\textbf{Circle:} Over 15.81~s, $\omega_z$ settles to $0.402$~rad/s (mean over 2--15~s). Full-run mean $a_y=0.0594$~m/s$^2$ is consistent with inward acceleration if IMU $y$ points left during level motion.
 
-\textbf{Spiral:} Mean $\omega_z$ is $0.403$~rad/s over 25--90~s of the 90.82~s recording; larger early variations settle into steady turning.
+\textbf{Spiral:} Over 90.82~s, early angular-rate variations settle to $0.403$~rad/s (mean over 25--90~s). Full-run mean $a_y=0.0390$~m/s$^2$ is similarly compatible with inward acceleration under that alignment.
 
-\textbf{Line:} Mean $\omega_z$ is $5.4\times10^{-4}$~rad/s over 12.19~s, indicating little net rotation. The mean of $a_x$ is close to zero ($0.0017$~m/s$^2$), indicating that positive and negative readings largely balance over the recording.
+\textbf{Line:} Over 12.19~s, mean $\omega_z=5.4\times10^{-4}$~rad/s indicates little net rotation. Means $a_x=0.0017$, $a_y=-0.0010$~m/s$^2$ are near zero, with smaller $a_y$ fluctuations. A small signed $a_x$ mean does not prove constant velocity; odometry shows speed increasing.
