@@ -3,7 +3,7 @@ Figure~\ref{fig:lidar} shows scans nearest each recording's midpoint.
 For 720 original beam indices, $\alpha_i=\alpha_{\min}+i\Delta\alpha$,
 $x_i=r_i\cos\alpha_i$, and $y_i=r_i\sin\alpha_i$.
 Removing infinite returns leaves 456, 458, and 488 points; finite positive ranges remain because sensor limits were not logged.
-Wall-like segments have different orientations in these local sensor frames.
+Wall-like segments appear to have different orientations in these local sensor frames.
 
 \begin{figure}[H]
   \centering
@@ -15,6 +15,6 @@ Wall-like segments have different orientations in these local sensor frames.
 \begin{figure}[H]
   \centering
   \includegraphics[width=3.2in]{figures/map_results.pdf}
-  \caption{Occupancy-grid map of the environment, obtained from LiDAR scans using ROS~2 SLAM, visualized in RViz, and saved as a PGM file using Nav2's \texttt{map\_saver\_cli}. The robot was located at the bottom-right corner of the image.}
+  \caption{Occupancy-grid map of the environment, obtained from LiDAR scans using ROS~2 SLAM, visualized in RViz, and saved as a PGM file using Nav2's \texttt{map\_saver\_cli}. The robot is located at the blue $+$ in the bottom right.}
   \label{fig:map}
 \end{figure}
