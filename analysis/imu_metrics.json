@@ -1,0 +1,213 @@
+{
+  "circle": {
+    "samples": 522,
+    "duration_s": 15.809115022,
+    "timestamp_convention": "integer ns differences / 1e9; first sample is t=0",
+    "sample_interval_min_median_max_s": [
+      0.02153413400000126,
+      0.030027617000000006,
+      0.093443151
+    ],
+    "non_increasing_intervals": 0,
+    "gaps_over_twice_median_interval": 2,
+    "non_finite_values": 0,
+    "acc_x_m_s2": {
+      "minimum": -1.1291873455047607,
+      "maximum": 1.393739938735962,
+      "mean": -0.016092287512117876,
+      "median": -0.02340596914291382,
+      "population_standard_deviation": 0.241840925334481
+    },
+    "acc_y_m_s2": {
+      "minimum": -0.743111252784729,
+      "maximum": 0.7769114375114441,
+      "mean": 0.059371125195674966,
+      "median": 0.030900001525878906,
+      "population_standard_deviation": 0.2455921045098023
+    },
+    "angular_z_rad_s": {
+      "minimum": -0.000282177030821539,
+      "maximum": 0.5083729918054664,
+      "mean": 0.3825161719052228,
+      "median": 0.3993429542735084,
+      "population_standard_deviation": 0.088052565959976
+    },
+    "interpretation": "Full-run standard deviations describe observed variation, not isolated sensor noise or measurement accuracy.",
+    "descriptive_time_windows": {
+      "0_to_1_s": {
+        "samples": 29,
+        "angular_z_rad_s": {
+          "minimum": -0.000282177030821539,
+          "maximum": 0.3179247426735222,
+          "mean": 0.04382517996485926,
+          "median": 0.00016004821785141568,
+          "population_standard_deviation": 0.08871248446061943
+        }
+      },
+      "2_to_15_s": {
+        "samples": 432,
+        "angular_z_rad_s": {
+          "minimum": 0.3208445870640441,
+          "maximum": 0.5083729918054664,
+          "mean": 0.4024025319283286,
+          "median": 0.4006745694954452,
+          "population_standard_deviation": 0.024422745079303386
+        }
+      },
+      "5_to_10_s": {
+        "samples": 167,
+        "angular_z_rad_s": {
+          "minimum": 0.3514382374580353,
+          "maximum": 0.48752863207627783,
+          "mean": 0.4028131609260264,
+          "median": 0.4015989534951908,
+          "population_standard_deviation": 0.02443755202122213
+        }
+      }
+    }
+  },
+  "spiral": {
+    "samples": 3019,
+    "duration_s": 90.8219354,
+    "timestamp_convention": "integer ns differences / 1e9; first sample is t=0",
+    "sample_interval_min_median_max_s": [
+      0.021556831000000276,
+      0.03002733899999832,
+      0.057793754
+    ],
+    "non_increasing_intervals": 0,
+    "gaps_over_twice_median_interval": 0,
+    "non_finite_values": 0,
+    "acc_x_m_s2": {
+      "minimum": -0.9069935083389282,
+      "maximum": 1.041406273841858,
+      "mean": -0.021395651067712917,
+      "median": -0.020240724086761475,
+      "population_standard_deviation": 0.2200618041024033
+    },
+    "acc_y_m_s2": {
+      "minimum": -0.5313756465911865,
+      "maximum": 0.9150378108024597,
+      "mean": 0.03903346819449593,
+      "median": 0.02232426404953003,
+      "population_standard_deviation": 0.20832443148136442
+    },
+    "angular_z_rad_s": {
+      "minimum": -0.0005931558288098442,
+      "maximum": 0.7337292558278555,
+      "mean": 0.4057592962322896,
+      "median": 0.4035928098716886,
+      "population_standard_deviation": 0.08418215806094605
+    },
+    "interpretation": "Full-run standard deviations describe observed variation, not isolated sensor noise or measurement accuracy.",
+    "descriptive_time_windows": {
+      "0_to_1_s": {
+        "samples": 33,
+        "angular_z_rad_s": {
+          "minimum": -6.733010435710205e-07,
+          "maximum": 5.354286726383802e-07,
+          "mean": -8.22636561929163e-08,
+          "median": -4.070062929767081e-11,
+          "population_standard_deviation": 3.383503638331251e-07
+        }
+      },
+      "2_to_15_s": {
+        "samples": 435,
+        "angular_z_rad_s": {
+          "minimum": -0.0005931558288098442,
+          "maximum": 0.7337292558278555,
+          "mean": 0.43718899602977895,
+          "median": 0.4102633757465278,
+          "population_standard_deviation": 0.11313578231524209
+        }
+      },
+      "5_to_10_s": {
+        "samples": 168,
+        "angular_z_rad_s": {
+          "minimum": 0.33360265706351916,
+          "maximum": 0.724912067140767,
+          "mean": 0.4988564854944876,
+          "median": 0.48210365855602644,
+          "population_standard_deviation": 0.09391173481853106
+        }
+      },
+      "15_to_20_s": {
+        "samples": 166,
+        "angular_z_rad_s": {
+          "minimum": 0.38766488314081987,
+          "maximum": 0.6889800182298612,
+          "mean": 0.5175229678292542,
+          "median": 0.5236268534218851,
+          "population_standard_deviation": 0.0744993471404646
+        }
+      },
+      "25_to_90_s": {
+        "samples": 2158,
+        "angular_z_rad_s": {
+          "minimum": 0.3285258476246413,
+          "maximum": 0.5040202300852965,
+          "mean": 0.402665852980504,
+          "median": 0.40182382072163386,
+          "population_standard_deviation": 0.024405958417637166
+        }
+      }
+    }
+  },
+  "line": {
+    "samples": 407,
+    "duration_s": 12.193850915,
+    "timestamp_convention": "integer ns differences / 1e9; first sample is t=0",
+    "sample_interval_min_median_max_s": [
+      0.022115402000000284,
+      0.030016466000000186,
+      0.04007880099999994
+    ],
+    "non_increasing_intervals": 0,
+    "gaps_over_twice_median_interval": 0,
+    "non_finite_values": 0,
+    "acc_x_m_s2": {
+      "minimum": -0.788557767868042,
+      "maximum": 1.0465664863586426,
+      "mean": 0.0016960954197501668,
+      "median": 0.002325713634490967,
+      "population_standard_deviation": 0.23416491328183922
+    },
+    "acc_y_m_s2": {
+      "minimum": -0.2528277039527893,
+      "maximum": 0.23601704835891724,
+      "mean": -0.0009608526487608213,
+      "median": -0.0028163790702819824,
+      "population_standard_deviation": 0.07964494440129324
+    },
+    "angular_z_rad_s": {
+      "minimum": -0.05457418595207883,
+      "maximum": 0.07495130107888011,
+      "mean": 0.0005374927476428176,
+      "median": 0.00022917369151212745,
+      "population_standard_deviation": 0.011682850199975444
+    },
+    "interpretation": "Full-run standard deviations describe observed variation, not isolated sensor noise or measurement accuracy.",
+    "descriptive_time_windows": {
+      "0_to_1_s": {
+        "samples": 34,
+        "angular_z_rad_s": {
+          "minimum": 0.0002131478586706751,
+          "maximum": 0.0002558180609888723,
+          "mean": 0.00023049002229895324,
+          "median": 0.00022986537962622406,
+          "population_standard_deviation": 1.1327626539521596e-05
+        }
+      },
+      "5_to_10_s": {
+        "samples": 166,
+        "angular_z_rad_s": {
+          "minimum": -0.02737455964186987,
+          "maximum": 0.022496164720283072,
+          "mean": 0.0006361736249199547,
+          "median": 0.0016886072036168811,
+          "population_standard_deviation": 0.00859362128374167
+        }
+      }
+    }
+  }
+}

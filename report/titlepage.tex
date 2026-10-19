@@ -1,57 +1,34 @@
-% Last modification: 2016-09-29 (Marc Deisenroth)
-% Modification for UW: 2017-05-22 (jphickey)
-% Modification for UW: 2017-10-30 (jphickey)
 \begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{0.9cm}
+\includegraphics[width=10cm]{figures/uw.png}\\[1.8cm]
+{\Large\bfseries MTE544 -- Autonomous Mobile Robotics}\\[0.5cm]
+{\large University of Waterloo}\\[0.2cm]
+Department of Mechanical and Mechatronics Engineering\\[1.3cm]
+\rule{\linewidth}{0.5mm}\\[0.4cm]
+{\huge\bfseries \reporttitle\par}
+\vspace{0.4cm}
+\rule{\linewidth}{0.5mm}
+\vspace{1.2cm}
 
-\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{ll}
+\textbf{Group member (Family Name, First Name)} & \textbf{Student ID}\\
+\reportauthorOne & \cidOne\\
+\reportauthorTwo & \cidTwo\\
+\reportauthorThree & \cidThree\\
+\end{tabular}
 
-
-%----------------------------------------------------------------------------------------
-%	LOGO SECTION
-%----------------------------------------------------------------------------------------
-
-
-
-\begin{center} % Center remainder of the page
-
-%----------------------------------------------------------------------------------------
-%	HEADING SECTIONS
-%----------------------------------------------------------------------------------------
-
-\includegraphics[width = 10cm]{./figures/uw}\\[1.5cm] 
-\textbf{\textsc{\Large MTE544 - Autonomous Mobile Robotics}}\\[1.0cm] 
-\textsc{\Large University of Waterloo}\\[0.5cm] 
-\textsc{\large Department of Mechanical and Mechatronics Engineering}\\[0.95cm] 
-
-%----------------------------------------------------------------------------------------
-%	TITLE SECTION
-%----------------------------------------------------------------------------------------
-
-\HRule \\[0.4cm]
-{ \huge \bfseries \reporttitle}\\ % Title of your document
-\HRule \\[1.5cm]
-\end{center}
-%----------------------------------------------------------------------------------------
-%	AUTHOR SECTION
-%----------------------------------------------------------------------------------------
-
-%\begin{minipage}{0.4\hsize}
-\begin{flushleft} \large
-\textit{Authors:}\\
-\reportauthorOne~(ID: \cidOne)\\ % Your name
-\reportauthorTwo~(ID: \cidTwo)\\   % Your name
-\reportauthorThree~(ID: \cidThree)   % Your name
-\end{flushleft}
-\vspace{4cm}
+\vspace{0.9cm}
+\begin{tabular}{ll}
+\textbf{Station number:} & \stationNumber\\[0.2cm]
+\textbf{Robot number:} & \robotNumber
+\end{tabular}
+\vfill
 \makeatletter
-Date: \@date 
-
-\vfill % Fill the rest of the page with whitespace
-
-
-
+\@date
 \makeatother
-
-
+\vspace{0.8cm}
+\end{center}
 \end{titlepage}
-

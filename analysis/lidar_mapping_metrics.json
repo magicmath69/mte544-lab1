@@ -1,0 +1,199 @@
+{
+  "lidar": {
+    "selection": "Nearest scan to the midpoint of first and last logged timestamps; earliest row wins ties.",
+    "range_filter": "Keep finite strictly positive ranges. Sensor range_min/range_max were not logged; no undocumented range bounds imposed.",
+    "coordinates": "alpha_i = angle_min + original_beam_index_i * angle_increment; x_i = r_i cos(alpha_i), y_i = r_i sin(alpha_i). Sensor frame; no odometry transform.",
+    "common_plot_domain_m": [
+      -10.0,
+      10.0
+    ],
+    "motions": {
+      "circle": {
+        "source": "laser_content_circle.csv",
+        "scan_count": 112,
+        "beam_counts": [
+          720
+        ],
+        "duration_s": 15.586209543,
+        "selected_row_zero_based": 54,
+        "selected_stamp_ns": 1791403375612126333,
+        "selected_elapsed_s": 7.725558276,
+        "selected_midpoint_error_s": 0.0675464955,
+        "angle_min_rad": -3.1241393089294434,
+        "angle_increment_rad": 0.008714509196579456,
+        "selected_ranges": {
+          "beams": 720,
+          "finite_positive": 456,
+          "positive_infinity": 264,
+          "negative_infinity": 0,
+          "nan": 0,
+          "nonpositive_finite": 0
+        },
+        "all_ranges": {
+          "beams": 80640,
+          "finite_positive": 54055,
+          "positive_infinity": 26585,
+          "negative_infinity": 0,
+          "nan": 0,
+          "nonpositive_finite": 0
+        },
+        "selected_finite_positive_range_m": [
+          0.13300000131130219,
+          9.288000106811523
+        ],
+        "selected_xy_bounds_m": {
+          "x": [
+            -5.779926952255781,
+            8.036502262150352
+          ],
+          "y": [
+            -8.173177776985884,
+            5.825036333339988
+          ]
+        }
+      },
+      "spiral": {
+        "source": "laser_content_spiral.csv",
+        "scan_count": 645,
+        "beam_counts": [
+          720
+        ],
+        "duration_s": 88.689343664,
+        "selected_row_zero_based": 322,
+        "selected_stamp_ns": 1791403439840193643,
+        "selected_elapsed_s": 44.313878273,
+        "selected_midpoint_error_s": 0.030793559,
+        "angle_min_rad": -3.1241393089294434,
+        "angle_increment_rad": 0.008714509196579456,
+        "selected_ranges": {
+          "beams": 720,
+          "finite_positive": 458,
+          "positive_infinity": 262,
+          "negative_infinity": 0,
+          "nan": 0,
+          "nonpositive_finite": 0
+        },
+        "all_ranges": {
+          "beams": 464400,
+          "finite_positive": 313469,
+          "positive_infinity": 150931,
+          "negative_infinity": 0,
+          "nan": 0,
+          "nonpositive_finite": 0
+        },
+        "selected_finite_positive_range_m": [
+          0.13300000131130219,
+          10.871999740600586
+        ],
+        "selected_xy_bounds_m": {
+          "x": [
+            -7.4924959616945905,
+            8.194897336992774
+          ],
+          "y": [
+            -7.942993374901064,
+            5.674917607289801
+          ]
+        }
+      },
+      "line": {
+        "source": "laser_content_line.csv",
+        "scan_count": 75,
+        "beam_counts": [
+          720
+        ],
+        "duration_s": 10.022273618,
+        "selected_row_zero_based": 37,
+        "selected_stamp_ns": 1791403352300713825,
+        "selected_elapsed_s": 4.998992307,
+        "selected_midpoint_error_s": 0.012144502000000001,
+        "angle_min_rad": -3.1241393089294434,
+        "angle_increment_rad": 0.008714509196579456,
+        "selected_ranges": {
+          "beams": 720,
+          "finite_positive": 488,
+          "positive_infinity": 232,
+          "negative_infinity": 0,
+          "nan": 0,
+          "nonpositive_finite": 0
+        },
+        "all_ranges": {
+          "beams": 54000,
+          "finite_positive": 36354,
+          "positive_infinity": 17646,
+          "negative_infinity": 0,
+          "nan": 0,
+          "nonpositive_finite": 0
+        },
+        "selected_finite_positive_range_m": [
+          0.13300000131130219,
+          8.887999534606934
+        ],
+        "selected_xy_bounds_m": {
+          "x": [
+            -6.1820840590582335,
+            8.10198352523266
+          ],
+          "y": [
+            -5.683930709106545,
+            3.7162964095816404
+          ]
+        }
+      }
+    }
+  },
+  "map": {
+    "sources": [
+      "map.pgm",
+      "map.yaml"
+    ],
+    "render": "Saved PGM, not an RViz screenshot; no smoothing or crop.",
+    "resolution_m_per_pixel": 0.05,
+    "origin_xy_yaw": [
+      -7.72,
+      -9.43,
+      0
+    ],
+    "width_pixels": 263,
+    "height_pixels": 315,
+    "extent_m": {
+      "x": [
+        -7.72,
+        5.430000000000001
+      ],
+      "y": [
+        -9.43,
+        6.32
+      ]
+    },
+    "pixel_values_counts": {
+      "0": 5100,
+      "205": 40855,
+      "254": 36890
+    },
+    "occupancy_threshold": 0.65,
+    "free_threshold": 0.25,
+    "saved_image_class_counts": {
+      "occupied": 5100,
+      "free": 36890,
+      "unknown_or_intermediate": 40855
+    },
+    "saved_image_class_fractions": {
+      "occupied": 0.06156074597139236,
+      "free": 0.4452893958597381,
+      "unknown_or_intermediate": 0.4931498581688696
+    },
+    "yaml_reload_class_counts": {
+      "occupied": 5100,
+      "free": 77745,
+      "unknown": 0
+    },
+    "yaml_reload_class_fractions": {
+      "occupied": 0.06156074597139236,
+      "free": 0.9384392540286076,
+      "unknown": 0.0
+    },
+    "metadata_limitation": "Gray205 (saved unknown/intermediate) has occupancy50/255=0.196078, below YAMLfree_thresh0.25, so it reloads asfree. Neither source file was modified.",
+    "classification_reference": "https://github.com/ros-navigation/navigation2/blob/humble/nav2_map_server/src/map_io.cpp"
+  }
+}
