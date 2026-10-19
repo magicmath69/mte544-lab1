@@ -43,8 +43,9 @@ source metadata limitation; the supplied map files have not been changed.
 Primary implementation: https://github.com/ros-navigation/navigation2/blob/humble/nav2_map_server/src/map_io.cpp
 
 The report's brief map description names the ROS 2 SLAM, RViz, and Nav2 map-saver
-workflow documented in the lab instructions. The robot's bottom-right location
-was supplied by Joe; the saved PGM does not independently record the robot pose.
+workflow documented in the lab instructions. At Joe's request, the blue plus at
+map coordinates (0, 0) is described as the robot's reference origin; the saved
+PGM does not independently record the robot's current pose.
 
 Course reference checked for interpretation: Sensing and Measurements I,
 odometry, gyroscope, and accelerometer sections. The report follows the lab

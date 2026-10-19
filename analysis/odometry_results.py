@@ -1,4 +1,9 @@
-"""Regenerate odometry evidence from the original CSV logs."""
+"""Regenerate odometry evidence from the original 2,367 CSV poses.
+
+Chart contract: 7 x 3.15 inch PDF/PNG with x-y paths above raw position/yaw
+histories. Every time-history panel labels metres left and radians right;
+retain the blue/gold/charcoal palette, line styles, and original data scales.
+"""
 
 import csv
 import json
@@ -89,7 +94,7 @@ def main():
         "grid.color": "#DBDEE3", "grid.linewidth": .5, "pdf.fonttype": 42,
     })
     fig, axes = plt.subplots(2, 3, figsize=(7, 3.15))
-    fig.subplots_adjust(left=.07, right=.9, bottom=.18, top=.91, wspace=.66, hspace=.72)
+    fig.subplots_adjust(left=.07, right=.9, bottom=.18, top=.91, wspace=.80, hspace=.72)
     for column, name in enumerate(motions):
         time, pose, yaw = data[name]
         top, bottom = axes[:, column]
@@ -109,10 +114,8 @@ def main():
         right.yaxis.set_major_locator(MaxNLocator(3))
         right.yaxis.set_major_formatter(ScalarFormatter(useOffset=False))
         right.spines["top"].set_visible(False)
-        if column == 2:
-            right.set_ylabel(r"$\theta$ (rad)", labelpad=2)
-        if column == 0:
-            bottom.set_ylabel("x, y (m)", labelpad=2)
+        right.set_ylabel(r"$\theta$ (rad)", labelpad=2)
+        bottom.set_ylabel("x, y (m)", labelpad=2)
         bottom.set(xlabel="Elapsed time (s)", xlim=(0, time[-1]))
         bottom.set_title(f"n={len(time):,}; T={time[-1]:.2f} s", fontsize=8, loc="left", pad=4)
         for ax in (top, bottom):
