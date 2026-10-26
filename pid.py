@@ -1,29 +1,32 @@
 from rclpy.time import Time
 from utilities import Logger
 
-# Controller type
-P=0 # poportional
-PD=1 # proportional and derivative
-PI=2 # proportional and integral
-PID=3 # proportional, integral, derivative
+#controller type
+P=0 
+PD=1
+PI=2 
+PID=3
 
 class PID_ctrl:
     
-    def __init__(self, type_, kp=1.2,kv=0.8,ki=0.2, history_length=3, filename_="errors.csv"):
+    def __init__(self, type_, kp=1.2,kv=0.8,ki=0.2, history_length=3, filename_="errors.csv", integral_limit=None):
         
-        # Data for the controller
+        #data for the controller
         self.history_length=history_length
         self.history=[]
         self.error_int=0.0
         self.type=type_
 
-        # Controller gains
-        self.kp=kp    # proportional gain
-        self.kv=kv    # derivative gain
-        self.ki=ki    # integral gain
+        #controller gains
+        self.kp=kp
+        self.kv=kv
+        self.ki=ki
+
+        # anti-windup: max integral action, none = no limit
+        self.integral_limit=integral_limit
         
         self.logger=Logger(filename_)
-        # Remeber that you are writing to the file named filename_ or errors.csv the following:
+        # use this format when writing toto the file named filename_ or errors.csv:
             # error, error_dot, error_int and time stamp
 
     
@@ -43,8 +46,7 @@ class PID_ctrl:
         stamp_ns=Time.from_msg(stamp).nanoseconds
         repeated_stamp=False
 
-        # Accumulate the area under the error using the actual odometry times.
-        # These diagnostics are logged even though P control uses only the error.
+        # integral of error since last sample (trapezoid rule, odometry timestamps)
         if self.history:
             previous_error, previous_stamp=self.history[-1]
             previous_ns=Time.from_msg(previous_stamp).nanoseconds
@@ -52,13 +54,19 @@ class PID_ctrl:
             if dt > 0:
                 self.error_int+=0.5 * (previous_error + latest_error) * dt
             elif dt < 0:
-                # A simulation/odometry time reset starts a new error history.
+                # sim time reset starts a new error history.
                 self.history.clear()
                 self.error_int=0.0
             else:
                 repeated_stamp=True
 
-        # A repeated reading replaces the last sample without adding elapsed time.
+        # Part 5: anti-windup clamp. the linear error (a distance) is never negative, so its
+        # integral only grows and would keep pushing the robot after it reaches the goal
+        if self.integral_limit is not None and self.ki != 0:
+            max_error_int=self.integral_limit / abs(self.ki)
+            self.error_int=max(-max_error_int, min(max_error_int, self.error_int))
+
+        # accounts for edge case of repeated reading without messing up timestamping
         if repeated_stamp:
             self.history[-1]=stamped_error
         else:
@@ -66,8 +74,8 @@ class PID_ctrl:
         if (len(self.history) > self.history_length):
             self.history.pop(0)
 
-        # Estimate the slope over the retained history. A first sample or a
-        # repeated timestamp has no elapsed interval from which to find a slope.
+        # Part 5: error derrivative
+        # note: the first sample we cant find a derivative for
         error_dot=0.0
         if len(self.history) > 1 and not repeated_stamp:
             first_error, first_stamp=self.history[0]
@@ -75,22 +83,19 @@ class PID_ctrl:
             if elapsed > 0:
                 error_dot=(latest_error - first_error) / elapsed
 
-        # Log every sample, including startup, using nanoseconds like robot_pose.csv.
+        # Part 4: logging
         self.logger.log_values([latest_error, error_dot, self.error_int, stamp_ns])
 
-        # Part 4: proportional control maps the current error to a speed request.
+        # Part 4: P maps error to a speed
         if self.type == P:
             return self.kp * latest_error
         
-        # TODO Part 5: Implement the control law corresponding to each type of controller
+        # Part 5: PD, PI and PID
         elif self.type == PD:
-            raise NotImplementedError("PD control is part of Part 5")
-            # return ... # complete
+            return self.kp * latest_error + self.kv * error_dot
         
         elif self.type == PI:
-            raise NotImplementedError("PI control is part of Part 5")
-            # return ... # complete
+            return self.kp * latest_error + self.ki * self.error_int
         
         elif self.type == PID:
-            raise NotImplementedError("PID control is part of Part 5")
-            # return ... # complete
+            return self.kp * latest_error + self.kv * error_dot + self.ki * self.error_int

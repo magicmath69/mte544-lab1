@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 
 
@@ -8,22 +10,25 @@ M_PI=3.1415926535
 
 P=0; PD=1; PI=2; PID=3
 
-# Limits valid for both the Burger simulation and the TurtleBot4 in safe mode.
 # Burger maxima: 0.22 m/s, 2.84 rad/s; TurtleBot4: 0.31 m/s, 1.90 rad/s.
-# https://emanual.robotis.com/docs/en/platform/turtlebot3/features/
-# https://turtlebot.github.io/turtlebot4-user-manual/overview/features.html
 MAX_LINEAR_VELOCITY=0.22
 MAX_ANGULAR_VELOCITY=1.90
+
+# Part 5: anti-windup clamp for the linear loop (see pid.py):
+# note: angular error is signed, so its integral unwinds on its own.
+LINEAR_INTEGRAL_LIMIT=0.25 * MAX_LINEAR_VELOCITY
 
 class controller:
     
     
-    # Default gains of the controller for linear and angular motions
-    def __init__(self, klp=0.2, klv=0.2, kli=0.2, kap=0.2, kav=0.2, kai=0.2):
+    # default gains of the controller for linear and angular motions
+    def __init__(self, klp=0.2, klv=0.2, kli=0.2, kap=0.2, kav=0.2, kai=0.2, ctrl_type=P, log_dir="."):
         
         # TODO Part 5 and 6: Modify the below lines to test your PD, PI, and PID controller
-        self.PID_linear=PID_ctrl(P, klp, klv, kli, filename_="linear.csv")
-        self.PID_angular=PID_ctrl(P, kap, kav, kai, filename_="angular.csv")
+        # ctrl_type (P, PD, PI or PID) is used for both loops; the logs go to log_dir (one folder per run).
+        self.PID_linear=PID_ctrl(ctrl_type, klp, klv, kli, filename_=os.path.join(log_dir, "linear.csv"),
+                                 integral_limit=LINEAR_INTEGRAL_LIMIT)
+        self.PID_angular=PID_ctrl(ctrl_type, kap, kav, kai, filename_=os.path.join(log_dir, "angular.csv"))
 
     
     def vel_request(self, pose, goal, status):
@@ -44,9 +49,9 @@ class controller:
 
 class trajectoryController(controller):
 
-    def __init__(self, klp=0.2, klv=0.2, kli=0.2, kap=0.2, kav=0.2, kai=0.2):
+    def __init__(self, klp=0.2, klv=0.2, kli=0.2, kap=0.2, kav=0.2, kai=0.2, ctrl_type=P, log_dir="."):
         
-        super().__init__(klp, klv, kli, kap, kav, kai)
+        super().__init__(klp, klv, kli, kap, kav, kai, ctrl_type, log_dir)
     
     def vel_request(self, pose, listGoals, status):
         
@@ -61,7 +66,7 @@ class trajectoryController(controller):
         linear_vel=self.PID_linear.update([e_lin, pose[3]], status)
         angular_vel=self.PID_angular.update([e_ang, pose[3]], status) 
 
-        # Apply the same robot velocity limits when following a trajectory.
+        # applys robot velocity limits when following a trajectory as well as pure pursuit
         linear_vel=float(np.clip(linear_vel, -MAX_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY))
         angular_vel=float(np.clip(angular_vel, -MAX_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY))
         

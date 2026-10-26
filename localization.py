@@ -13,22 +13,25 @@ from rclpy import init, spin
 rawSensor = 0
 class localization(Node):
     
-    def __init__(self, localizationType=rawSensor):
+    def __init__(self, localizationType=rawSensor, log_filename="robot_pose.csv"):
 
         super().__init__("localizer")
         
         # TODO Part 3: Define the QoS profile variable based on whether you are using the simulation (Turtlebot 3 Burger) or the real robot (Turtlebot 4)
         # Remember to define your QoS profile based on the information available in "ros2 topic info /odom --verbose" as explained in Tutorial 3
 
-        # Best effort matches the /odom QoS on both the TurtleBot3 sim and the TurtleBot4
+        # Best effort matches the /odom QoS on both the TurtleBot3 sim and the TurtleBot4.
+        # depth=1 keeps only the newest message: decisions.py reads one message per 0.1 s
+        # control step while odom arrives faster, so a deeper queue would hand the
+        # controller a pose that is several messages (~0.5 s) old.
         odom_qos=QoSProfile(
         reliability=ReliabilityPolicy.BEST_EFFORT,
         durability=DurabilityPolicy.VOLATILE,
         history=HistoryPolicy.KEEP_LAST,
-        depth=10,
+        depth=1,
         )
         
-        self.loc_logger=Logger("robot_pose.csv", ["x", "y", "theta", "stamp"])
+        self.loc_logger=Logger(log_filename, ["x", "y", "theta", "stamp"])
         self.pose=None
         
         if localizationType == rawSensor:
