@@ -8,6 +8,13 @@ M_PI=3.1415926535
 
 P=0; PD=1; PI=2; PID=3
 
+# Limits valid for both the Burger simulation and the TurtleBot4 in safe mode.
+# Burger maxima: 0.22 m/s, 2.84 rad/s; TurtleBot4: 0.31 m/s, 1.90 rad/s.
+# https://emanual.robotis.com/docs/en/platform/turtlebot3/features/
+# https://turtlebot.github.io/turtlebot4-user-manual/overview/features.html
+MAX_LINEAR_VELOCITY=0.22
+MAX_ANGULAR_VELOCITY=1.90
+
 class controller:
     
     
@@ -28,10 +35,9 @@ class controller:
         linear_vel=self.PID_linear.update([e_lin, pose[3]], status)
         angular_vel=self.PID_angular.update([e_ang, pose[3]], status)
         
-        # TODO Part 4: Add saturation limits for the robot linear and angular velocity
-
-        linear_vel = ... if linear_vel > 1.0 else linear_vel
-        angular_vel= ... if angular_vel > 1.0 else angular_vel
+        # Part 4: clamp both signs so turning right is limited like turning left.
+        linear_vel=float(np.clip(linear_vel, -MAX_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY))
+        angular_vel=float(np.clip(angular_vel, -MAX_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY))
         
         return linear_vel, angular_vel
     
@@ -55,10 +61,9 @@ class trajectoryController(controller):
         linear_vel=self.PID_linear.update([e_lin, pose[3]], status)
         angular_vel=self.PID_angular.update([e_ang, pose[3]], status) 
 
-        # TODO Part 5: Add saturation limits for the robot linear and angular velocity
-
-        linear_vel = ... if linear_vel > ... else linear_vel
-        angular_vel= ... if angular_vel > ... else angular_vel
+        # Apply the same robot velocity limits when following a trajectory.
+        linear_vel=float(np.clip(linear_vel, -MAX_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY))
+        angular_vel=float(np.clip(angular_vel, -MAX_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY))
         
         return linear_vel, angular_vel
 
