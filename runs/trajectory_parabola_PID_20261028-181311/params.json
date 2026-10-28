@@ -1,0 +1,17 @@
+{
+  "motion": "trajectory",
+  "trajectory": "parabola",
+  "goal": null,
+  "controller": "PID",
+  "gains": {
+    "klp": 0.2,
+    "klv": 0.05,
+    "kli": 0.025,
+    "kap": 0.5,
+    "kav": 0.1,
+    "kai": 0.025
+  },
+  "goal_tolerance": 0.05,
+  "name": "",
+  "started": "2026-10-28T18:13:11"
+}

@@ -31,8 +31,8 @@ GOAL_TOLERANCE=0.05
 # Part 5: controller gains. p = proportional, v = derivative, i = integral;
 # l = linear loop, a = angular loop. The controller type (--controller) picks which terms are used.
 # retune on the real robot and write the final values here. Any gain can be overridden during the run (e.g. --kap 1.5).
-POINT_GAINS={"klp": 0.8, "klv": 0.05, "kli": 0.1, "kap": 2.5, "kav": 0.25, "kai": 0.03}
-TRAJECTORY_GAINS={"klp": 0.8, "klv": 0.05, "kli": 0.1, "kap": 3.0, "kav": 0.1, "kai": 0.02}
+POINT_GAINS={"klp": 0.2, "klv": 0.05, "kli": 0.1, "kap": 2.5, "kav": 0.25, "kai": 0.03}
+TRAJECTORY_GAINS={"klp": 0.2, "klv": 0.05, "kli": 0.025, "kap": 1.0, "kav": 0.1, "kai": 0.025}
 
 # goals are in the odometry frame, so a run should start at the odom origin.
 START_POSE_TOLERANCE=0.05   # m

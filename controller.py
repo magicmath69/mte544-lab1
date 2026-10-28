@@ -16,7 +16,7 @@ MAX_ANGULAR_VELOCITY=1.90
 
 # Part 5: anti-windup clamp for the linear loop (see pid.py):
 # note: angular error is signed, so its integral unwinds on its own.
-LINEAR_INTEGRAL_LIMIT=0.25 * MAX_LINEAR_VELOCITY
+LINEAR_INTEGRAL_LIMIT= None #0.25 * MAX_LINEAR_VELOCITY
 
 class controller:
     

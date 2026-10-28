@@ -40,7 +40,7 @@ class planner:
 
         elif self.trajectory==SIGMOID:
             # y = 2/(1 + e^(-2x)) - 1 for x in [0.0, 2.5]
-            x=np.linspace(0.0, 2.5, num_points)
-            y=2/(1 + np.exp(-2*x)) - 1
+            x=np.linspace(0.0, 4, num_points)
+            y=2/(1 + np.exp(-1*x)) - 1
 
         return [[float(xi), float(yi)] for xi, yi in zip(x, y)]
