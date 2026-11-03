@@ -8,8 +8,8 @@ motion experiments.
 
 - [Lab manual](README.md)
 - [Grading rubric](rubrics.md)
-- [Simulation launch guide](tbt3Simulation.md)
-- [Physical TurtleBot4 connection guide](connectToUWtb4s.md)
+- [Simulation launch guide](../docs/tbt3Simulation.md)
+- [Physical TurtleBot4 connection guide](../docs/connectToUWtb4s.md)
 
 The starter materials originate from
 [UW-MTE544/MTE544_student](https://github.com/UW-MTE544/MTE544_student),

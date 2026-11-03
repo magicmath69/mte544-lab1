@@ -71,7 +71,7 @@ def lidar_results():
     # black plus identifies the sensor origin without relying on color alone.
     chosen, metrics = [], {}
     for motion in ("circle", "spiral", "line"):
-        scans = load_scans(ROOT / f"laser_content_{motion}.csv")
+        scans = load_scans(ROOT / "data" / f"laser_content_{motion}.csv")
         first, last = scans[0][3], scans[-1][3]
         # Integer arithmetic preserves nanosecond differences and chooses the
         # earliest row if two scans have identical midpoint distance.
@@ -136,14 +136,14 @@ def map_results():
     # Contract: faithful nearest-neighbor PGM raster with metric map-frame axes;
     # black occupied, light-gray unknown, white free; no inferred trajectory.
     metadata = {}
-    for line in (ROOT / "map.yaml").read_text().splitlines():
+    for line in (ROOT / "data" / "map.yaml").read_text().splitlines():
         if ":" in line:
             key, value = line.split(":", 1)
             metadata[key.strip()] = value.strip()
     resolution = float(metadata["resolution"])
     origin = ast.literal_eval(metadata["origin"])
     assert origin[2] == 0, "This saved map has zero yaw; rotated origins require a transform."
-    pixels = np.asarray(Image.open(ROOT / metadata["image"]))
+    pixels = np.asarray(Image.open(ROOT / "data" / metadata["image"]))
     height, width = pixels.shape
     xmin, ymin = origin[:2]
     xmax, ymax = xmin + width * resolution, ymin + height * resolution

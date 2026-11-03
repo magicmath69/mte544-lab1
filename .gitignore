@@ -22,9 +22,9 @@ Thumbs.db
 # Keep sensor CSVs and saved map files tracked: they are lab deliverables.
 
 # Local LaTeX compilation intermediates.
-report/*.aux
-report/*.log
-report/*.out
-report/*.thm
-report/*.toc
-report/*.synctex.gz
+lab1/report/*.aux
+lab1/report/*.log
+lab1/report/*.out
+lab1/report/*.thm
+lab1/report/*.toc
+lab1/report/*.synctex.gz

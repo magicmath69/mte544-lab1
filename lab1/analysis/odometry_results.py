@@ -21,7 +21,7 @@ BLUE, GOLD, INK = "#2458A6", "#B17A16", "#30343B"
 
 
 def read_motion(motion):
-    with (ROOT / f"odom_content_{motion}.csv").open(newline="") as stream:
+    with (ROOT / "data" / f"odom_content_{motion}.csv").open(newline="") as stream:
         reader = csv.reader(stream)
         assert [v.strip() for v in next(reader) if v.strip()] == ["x", "y", "th", "stamp"]
         rows = [[v.strip() for v in row if v.strip()] for row in reader if any(v.strip() for v in row)]

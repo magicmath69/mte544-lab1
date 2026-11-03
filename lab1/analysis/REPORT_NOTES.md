@@ -7,7 +7,7 @@ cross-references. The cover is separate from the two numbered content pages.
 
 Recorded inputs come from `magicmath69/mte544-lab1`, report branch commit
 `aef9d8d0c6cf59e9748cb3937bd44569734c0aef`. The source CSVs, saved PGM/YAML, and
-robot-control code have not been edited. Recreate the figures from the checkout
+robot-control code have not been edited. Recreate the figures from `lab1/`
 root with:
 
 ```

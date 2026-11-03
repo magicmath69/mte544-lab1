@@ -101,7 +101,7 @@ def summarize(time, signal):
 
 def main():
     data = {
-        motion: read_imu(ROOT / f"imu_content_{motion}.csv") for motion in MOTIONS
+        motion: read_imu(ROOT / "data" / f"imu_content_{motion}.csv") for motion in MOTIONS
     }
     metrics = {motion: summarize(*data[motion]) for motion in MOTIONS}
     output = ROOT / "report" / "figures"

@@ -11,6 +11,30 @@
 
 ---
 
+## Every new terminal
+
+`X` = robot number.
+```bash
+source ~/robohub/turtlebot4/configs/.bashrc
+export ROS_DOMAIN_ID=X
+```
+
+## Check topics and QoS
+
+```bash
+ros2 topic echo /odom --once
+ros2 topic info /odom --verbose   # localization.py subscribes best effort, which works with either
+ros2 daemon stop                  # if topics are missing, then list again
+```
+
+## Undock / drive / dock
+
+```bash
+ros2 action send_goal /undock irobot_create_msgs/action/Undock {}
+ros2 run teleop_twist_keyboard teleop_twist_keyboard            # drive to open space, then Ctrl+C
+ros2 action send_goal /dock irobot_create_msgs/action/Dock {}   # within 0.5 m of a dock
+```
+
 ## Drive to a point (p controller)
 
 1. **Reset the position** before every run. The goals are measured from where the robot was when the position was reset.
@@ -50,6 +74,7 @@ python3 decisions.py --motion point --controller PID
    - Parabola: 1.5 m forward, 2.25 m to the left.
    - Sigmoid: 2.5 m forward, 1 m to the left.
 3. `reached goal` prints when the robot is within 5 cm of the end of the curve.
+4. If a curve doesn't fit in the room, shrink the x range in `trajectory_planner` in `planner.py`.
 
 ## Tune gains
 
@@ -73,7 +98,7 @@ Overrides only apply to that run, and the code is not changed. See "save the fin
 
 ## Check a run's results
 
-1. **Each run saves a folder** `runs/<motion>_<controller>_<date-time>[_name]/` with:
+1. **Each run saves a folder** `runs/<motion>[_<trajectory>]_<controller>_<date-time>[_name]/`, for example `runs/trajectory_sigmoid_PD_20261028-143000/`, with:
    - `linear.csv`, `angular.csv`: error, error rate, error integral and timestamp for the driving and turning controllers.
    - `robot_pose.csv`: x, y, theta and timestamp from odometry.
    - `params.json`: the controller, gains, goal and goal tolerance used.
@@ -95,6 +120,18 @@ Overrides only apply to that run, and the code is not changed. See "save the fin
    ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist "{}"
    ```
 
+The CSVs are written row by row, so a run stopped with Ctrl+C still has its data.
+
+## Before leaving
+
+1. Plot a few runs to check the data is usable. It can't be collected again later.
+2. Zip the runs and copy the zip off the PC:
+   ```bash
+   zip -r lab2_data.zip runs
+   ```
+3. Dock the robot.
+4. Delete all code and files from the lab PC.
+
 ---
 
 ## For testing in VM
@@ -113,7 +150,7 @@ Overrides only apply to that run, and the code is not changed. See "save the fin
 | What you see | What to do |
 |---|---|
 | `WARNING: the robot is not at the odometry origin` | Ctrl+C, reset the position, run again |
-| Nothing happens after `logging to ...` | No odometry is arriving. Check with `python3 localization.py`: it should keep running and fill `robot_pose.csv`. Stop it with Ctrl+C |
+| `waiting for odom msgs ....` keeps printing | No odometry is arriving. Check the domain ID and `ros2 topic echo /odom --once`, then check with `python3 localization.py`: it should keep running and fill `robot_pose.csv`. Stop it with Ctrl+C |
 | The robot circles the goal and never finishes | Stop it; raise `kap` or lower `kli` |
 | The robot wobbles left and right | Lower `kap` or raise `kav` |
 | `No such file or directory` when plotting | Check the folder name with `ls runs`; the file is `robot_pose.csv` |
