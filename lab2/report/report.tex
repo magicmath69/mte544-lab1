@@ -1,0 +1,44 @@
+\documentclass[11pt,twoside,letterpaper]{article}
+\newcommand{\reporttitle}{Lab 2: Closed loop control of mobile robots}
+\newcommand{\reportauthorOne}{Adams, Hunter}
+\newcommand{\cidOne}{20997503}
+\newcommand{\reportauthorTwo}{Chen, Joe}
+\newcommand{\cidTwo}{20998545}
+\newcommand{\reportauthorThree}{Wielowieyski, Jacob}
+\newcommand{\cidThree}{21004619}
+\newcommand{\robotNumber}{7}
+\newcommand{\stationNumber}{\rule{2cm}{0.4pt}}
+\date{October 19, 2026}
+\input{includes}
+\input{notation}
+\geometry{left=0.7in,right=0.7in,top=0.55in,bottom=0.55in,headheight=14.5pt,headsep=10pt,footskip=20pt}
+\setlength{\headwidth}{\textwidth}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlength{\textfloatsep}{5pt}
+\setlength{\intextsep}{5pt}
+\captionsetup{margin=0pt,font=small,labelfont=bf,skip=3pt}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0pt}{7pt}{4pt}{\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0pt}{5pt}{3pt}{\normalsize\bfseries}}
+\makeatother
+\fancyhf{}
+\fancyhead[LO,LE]{\small MTE544 -- Lab 1}
+\fancyhead[RO,RE]{\small Sensor data processing}
+\fancyfoot[CO,CE]{\small \thepage\ / 2}
+\hypersetup{pdftitle={MTE544 Lab 2: Closed loop control of mobile robots},pdfauthor={Hunter Adams, Joe Chen, Jacob Wielowieyski}}
+\begin{document}
+\input{titlepage}
+\setcounter{page}{1}
+\pagestyle{fancy}
+\input{sections/odometry}
+\input{sections/imu}
+\input{sections/lidar_mapping}
+\medskip
+\textbf{Overall Interpretation:}
+\begin{list}{-}{\setlength{\leftmargin}{1em}\setlength{\labelwidth}{0.6em}\setlength{\labelsep}{0.4em}\setlength{\topsep}{2pt}\setlength{\partopsep}{0pt}\setlength{\itemsep}{1pt}\setlength{\parsep}{0pt}}
+\item \textbf{Odometry:} Outputs position and heading, showing a partial circle, widening spiral loops that later overlap, and a nearly straight path with increasing speed.
+\item \textbf{IMU:} Outputs sensor-frame acceleration and angular rate, indicating turning during the circle and spiral, and little net turning during the line.
+\item \textbf{LiDAR:} Outputs distances to surrounding surfaces; the saved map shows free space and obstacles.
+\end{list}
+\end{document}
