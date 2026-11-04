@@ -1,0 +1,20 @@
+{
+  "motion": "point",
+  "trajectory": null,
+  "goal": [
+    -1.0,
+    0.0
+  ],
+  "controller": "P",
+  "gains": {
+    "klp": 0.2,
+    "klv": 0.05,
+    "kli": 0.1,
+    "kap": 0.4,
+    "kav": 0.25,
+    "kai": 0.03
+  },
+  "goal_tolerance": 0.01,
+  "name": "",
+  "started": "2026-10-28T17:18:49"
+}
