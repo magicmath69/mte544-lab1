@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.9.19)  4 NOV 2026 19:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.9.19)  4 NOV 2026 19:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1146,28 +1146,25 @@ File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 ) [1
 
 {/Users/hmadams/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/Users/hmadams/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc} <./figures/uw.png>])
-<figures/fig_point_P.pdf, id=26, 503.78197pt x 222.75032pt>
+<figures/fig_point_P.pdf, id=27, 503.78197pt x 222.75032pt>
 File: figures/fig_point_P.pdf Graphic file (type pdf)
 <use figures/fig_point_P.pdf>
-Package pdftex.def Info: figures/fig_point_P.pdf  used on input line 51.
+Package pdftex.def Info: figures/fig_point_P.pdf  used on input line 53.
 (pdftex.def)             Requested size: 513.11745pt x 226.88962pt.
+<figures/fig_tuning.pdf, id=29, 504.0594pt x 115.75056pt>
+File: figures/fig_tuning.pdf Graphic file (type pdf)
+<use figures/fig_tuning.pdf>
+Package pdftex.def Info: figures/fig_tuning.pdf  used on input line 78.
+(pdftex.def)             Requested size: 513.11745pt x 117.84323pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [1 <./figures/fig_point_P.pdf>]
-<figures/fig_tuning.pdf, id=105, 504.0594pt x 115.75056pt>
-File: figures/fig_tuning.pdf Graphic file (type pdf)
-<use figures/fig_tuning.pdf>
-Package pdftex.def Info: figures/fig_tuning.pdf  used on input line 83.
-(pdftex.def)             Requested size: 513.11745pt x 117.84323pt.
-<figures/fig_trajectories.pdf, id=107, 497.24782pt x 172.64124pt>
+<figures/fig_trajectories.pdf, id=109, 498.58583pt x 172.64124pt>
 File: figures/fig_trajectories.pdf Graphic file (type pdf)
 <use figures/fig_trajectories.pdf>
-Package pdftex.def Info: figures/fig_trajectories.pdf  used on input line 101.
-(pdftex.def)             Requested size: 513.11745pt x 178.17017pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
+Package pdftex.def Info: figures/fig_trajectories.pdf  used on input line 96.
+(pdftex.def)             Requested size: 513.11745pt x 177.68018pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -1175,11 +1172,11 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [2 <./figures/fig_tuning.pdf>]
+ [2 <./figures/fig_tuning.pdf> <./figures/fig_trajectories.pdf>]
 \tf@thm=\write5
 \openout5 = `report.thm'.
 
- [3 <./figures/fig_trajectories.pdf>] (./report.aux)
+ [3] (./report.aux)
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-08-10>
@@ -1190,16 +1187,16 @@ Package rerunfilecheck Info: File `report.out' has not changed.
 Here is how much of TeX's memory you used:
  29607 strings out of 469046
  564309 string characters out of 5456947
- 957706 words of memory out of 5000000
+ 953625 words of memory out of 5000000
  58157 multiletter control sequences out of 15000+600000
  667496 words of font info for 119 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 112i,13n,111p,1180b,515s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 112i,12n,111p,1080b,515s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/bitstrea/charter/bchb8a.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/bitstrea/charter/bchr8a.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/bitstrea/charter/bchri8a.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/public/kpfonts/jkpex.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/public/kpfonts/jkpmi.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/public/kpfonts/jkpmn8a.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/public/kpfonts/jkpsy.pfb>
-Output written on report.pdf (4 pages, 203030 bytes).
+Output written on report.pdf (4 pages, 195859 bytes).
 PDF statistics:
- 278 PDF objects out of 1000 (max. 8388607)
- 108 compressed objects within 2 object streams
+ 269 PDF objects out of 1000 (max. 8388607)
+ 110 compressed objects within 2 object streams
  11 named destinations out of 1000 (max. 500000)
  49 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1793837852.83274 "report.tex" "report.pdf" "report" 1793837853.28298 0
+["pdflatex"] 1793839359.82664 "report.tex" "report.pdf" "report" 1793839360.25721 0
   "/Users/hmadams/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/Users/hmadams/Library/TinyTeX/texmf-dist/fonts/tfm/bitstrea/charter/bchb7t.tfm" 1136768653 2732 006d846b4d54f9b40899c7c3eecd771a ""
   "/Users/hmadams/Library/TinyTeX/texmf-dist/fonts/tfm/bitstrea/charter/bchb8r.tfm" 1136768653 5184 4fd08a9613e75c1da82714d79cf8b4f1 ""
@@ -205,15 +205,15 @@
   "/Users/hmadams/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1790901180 287972 6048c224301fa93727c609a6828d6730 ""
   "/Users/hmadams/Library/TinyTeX/texmf-var/web2c/pdftex/pdflatex.fmt" 1789865833 2303369 d8871625338dc25e6f24c0dfc6f79850 ""
   "/Users/hmadams/Library/TinyTeX/texmf.cnf" 1789788209 637 edd806fb06a89761a6034e1968af9017 ""
-  "figures/fig_point_P.pdf" 1793837851.10008 35420 681dcf3690181c96446734a71eadac00 ""
-  "figures/fig_trajectories.pdf" 1793837851.60269 25230 fbcd6d3460c984fa6caa348d41725dee ""
-  "figures/fig_tuning.pdf" 1793837851.39477 29070 7004e4f458d9e187aa121bdc4abd8707 ""
+  "figures/fig_point_P.pdf" 1793838583.54636 35420 d0fcb6a035015cfdd645d821ebf7432a ""
+  "figures/fig_trajectories.pdf" 1793838583.94372 25753 a24f8f7b7e173aa32eae4a1be1f2d0e8 ""
+  "figures/fig_tuning.pdf" 1793838583.76246 22014 5dfd86035a1e214e13c20aea7e9907b5 ""
   "figures/uw.png" 1793723798.32519 27299 70850ccbecf63870ea85b55f26b4d271 ""
   "includes.tex" 1793723798.32714 6769 f6a63b9d31a2ef4bf078287622d8b978 ""
   "notation.tex" 1793723798.3291 2579 29902145e637214087a54f07f9c947d5 ""
-  "report.aux" 1793837853.23938 6075 5ab5984764fee8ff019b962941b67659 "pdflatex"
-  "report.out" 1793837853.23993 681 33ab12a323a56298529e89bcebd03e06 "pdflatex"
-  "report.tex" 1793837839.93696 13505 fd52a9370d094933e1cf7be061713ef2 ""
+  "report.aux" 1793839360.21186 5942 a1d7e1e69e8da572d53a2243192e3e18 "pdflatex"
+  "report.out" 1793839360.21487 681 33ab12a323a56298529e89bcebd03e06 "pdflatex"
+  "report.tex" 1793839358.42695 12375 09e0248a9ca76d65fad37dbd470226de ""
   "titlepage.tex" 1793723798.33457 873 0ca8f36c825a4de131c0a73d8791c3b9 ""
   (generated)
   "report.aux"

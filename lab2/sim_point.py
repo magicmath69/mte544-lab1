@@ -37,7 +37,7 @@ sys.modules["rclpy"] = types.ModuleType("rclpy")
 sys.modules["rclpy.time"] = types.ModuleType("rclpy.time")
 sys.modules["rclpy.time"].Time = _Time
 
-from controller import controller, pointController
+from controller import controller
 from pid import P, PD, PI, PID
 from utilities import Logger, calculate_linear_error
 
@@ -55,9 +55,9 @@ RATE = 10      # Hz, control loop (decisions.py)
 DT = 0.001     # s, integration step
 
 
-def simulate(gains, controller_type, goal, start, tolerance, max_time, log_dir, controller_class=controller):
+def simulate(gains, controller_type, goal, start, tolerance, max_time, log_dir):
     """Run the control loop of decisions.py on the robot model; returns (duration, reached_goal)."""
-    ctrl = controller_class(**gains, ctrl_type=controller_type, log_dir=log_dir)
+    ctrl = controller(**gains, ctrl_type=controller_type, log_dir=log_dir)
     pose_logger = Logger(os.path.join(log_dir, "robot_pose.csv"), ["x", "y", "theta", "stamp"])
 
     x, y, th = start
@@ -95,7 +95,6 @@ def main():
     parser = argparse.ArgumentParser(description="simulate a point run on a model of the robot")
     parser.add_argument("--like", required=True, help="robot run to copy the goal, gains, tolerance and start pose from")
     parser.add_argument("--controller", type=str.upper, default="PID", choices=list(CONTROLLER_TYPES))
-    parser.add_argument("--improved", action="store_true", help="use pointController (controller.py) instead of controller")
     parser.add_argument("--gains-from", default=None, help="run to copy the gains from instead of the --like run")
     for gain in GAIN_NAMES:
         parser.add_argument(f"--{gain}", type=float, default=None, help=f"override the {gain} gain of the --like run")
@@ -116,19 +115,17 @@ def main():
     first = pd.read_csv(os.path.join(args.like, "robot_pose.csv"), skipinitialspace=True).iloc[0]
     start = [float(first["x"]), float(first["y"]), float(first["theta"])]
 
-    controller_class = pointController if args.improved else controller
-    folder = f"sim_point_{args.controller}{'_improved' if args.improved else ''}_like_{os.path.basename(os.path.normpath(args.like))}"
+    folder = f"sim_point_{args.controller}_like_{os.path.basename(os.path.normpath(args.like))}"
     log_dir = os.path.join(args.runs_dir, f"{folder}_{args.name}" if args.name else folder)
     os.makedirs(log_dir, exist_ok=True)
     duration, reached = simulate(gains, CONTROLLER_TYPES[args.controller], like["goal"], start,
-                                 tolerance, args.max_time, log_dir, controller_class)
+                                 tolerance, args.max_time, log_dir)
 
     with open(os.path.join(log_dir, "params.json"), "w") as file:
         json.dump({"motion": "point",
                    "trajectory": None,
                    "goal": like["goal"],
                    "controller": args.controller,
-                   "controller_class": controller_class.__name__,
                    "gains": gains,
                    "goal_tolerance": tolerance,
                    "name": args.name,

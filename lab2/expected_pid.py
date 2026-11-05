@@ -1,8 +1,9 @@
 import numpy as np
 
 TAU = 0.2
-KLP, KLV, KLI = 0.2, 0.05, 0.1
-KAP, KAV, KAI = 0.5, 0.25, 0.03
+# final PID gains, as run in 18:17:44 (parabola) and 18:27:45 (sigmoid)
+KLP, KLV, KLI = 0.2, 0.05, 0.025
+KAP, KAV, KAI = 1.0, 0.2, 0.025
 
 
 def run(kp, kd, ki, e0, dt=0.001, T=60):
@@ -47,6 +48,6 @@ show("PID", KAP, KAV, KAI, np.pi)
 print()
 print(f"distance PID zeta {zeta(KLP, KLV, KLI):.2f}, kli for zeta 0.7: {KLP**2 / (4 * 0.49 * (1 + KLV)):.3f}")
 print(f"heading PID roots {np.roots([1 + KAV, KAP, KAI]).round(3)}, slow time constant {-1 / np.roots([1 + KAV, KAP, KAI]).max():.1f} s")
-print(f"heading P zeta: kap 0.4 {zeta_lag(0.4, 0):.2f}, kap 0.5 {zeta_lag(0.5, 0):.2f}, PD {zeta_lag(0.5, KAV):.2f}")
+print(f"heading P zeta: kap 0.4 {zeta_lag(0.4, 0):.2f}, kap 0.5 {zeta_lag(0.5, 0):.2f}, kap {KAP} {zeta_lag(KAP, 0):.2f}, PD {zeta_lag(KAP, KAV):.2f}")
 z = zeta_lag(2.5, 0)
 print(f"heading P kap 2.5: zeta {z:.2f}, overshoot {100 * np.exp(-np.pi * z / np.sqrt(1 - z**2)):.1f} %")

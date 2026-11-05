@@ -16,9 +16,10 @@
   },
   "goal_tolerance": 0.01,
   "name": "final_gains",
-  "started": "2026-11-04T17:47:50",
+  "started": "2026-11-04T19:27:27",
   "source": "simulation (sim_point.py)",
   "like_run": "runs_submit/point_P_20261028-171226_2",
+  "gains_from": "runs_submit/trajectory_sigmoid_PID_20261028-182745",
   "start_pose": [
     1.86424074399838e-07,
     -2.193177692788595e-07,

@@ -30,10 +30,6 @@ class PID_ctrl:
             # error, error_dot, error_int and time stamp
 
     
-    def reset_integral(self):
-        # integral separation (pointController in controller.py)
-        self.error_int=0.0
-
     def update(self, stamped_error, status):
         
         if status == False:
