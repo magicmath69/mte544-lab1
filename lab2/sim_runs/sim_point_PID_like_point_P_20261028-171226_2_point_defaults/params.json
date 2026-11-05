@@ -1,0 +1,37 @@
+{
+  "motion": "point",
+  "trajectory": null,
+  "goal": [
+    -1.0,
+    0.0
+  ],
+  "controller": "PID",
+  "gains": {
+    "klp": 0.2,
+    "klv": 0.05,
+    "kli": 0.1,
+    "kap": 0.5,
+    "kav": 0.25,
+    "kai": 0.03
+  },
+  "goal_tolerance": 0.01,
+  "name": "point_defaults",
+  "started": "2026-11-04T17:47:45",
+  "source": "simulation (sim_point.py)",
+  "like_run": "runs_submit/point_P_20261028-171226_2",
+  "start_pose": [
+    1.86424074399838e-07,
+    -2.193177692788595e-07,
+    2.14455646514443e-06
+  ],
+  "model": {
+    "delay_s": 0.25,
+    "tau_s": 0.2,
+    "v_ratio": 0.9,
+    "w_ratio": 0.9,
+    "v_min_mps": 0.03,
+    "rate_hz": 10
+  },
+  "reached_goal": false,
+  "duration_s": 60.0
+}

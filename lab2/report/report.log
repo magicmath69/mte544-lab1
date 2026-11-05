@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.9.19)  20 OCT 2026 15:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.9.19)  4 NOV 2026 19:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1004,50 +1004,69 @@ Package: ntheorem 2011/08/15 1.33
 \c@definition=\count368
 \c@proof=\count369
 \c@elimination@steps=\count370
-) (./notation.tex)
-LaTeX Font Info:    Trying to load font information for OT1+bch on input line 30.
+) (./notation.tex) (/Users/hmadams/Library/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen312
+\lightrulewidth=\dimen313
+\cmidrulewidth=\dimen314
+\belowrulesep=\dimen315
+\belowbottomsep=\dimen316
+\aboverulesep=\dimen317
+\abovetopsep=\dimen318
+\cmidrulesep=\dimen319
+\cmidrulekern=\dimen320
+\defaultaddspace=\dimen321
+\@cmidla=\count371
+\@cmidlb=\count372
+\@aboverulesep=\dimen322
+\@belowrulesep=\dimen323
+\@thisruleclass=\count373
+\@lastruleclass=\count374
+\@thisrulewidth=\dimen324
+)
+LaTeX Font Info:    Trying to load font information for OT1+bch on input line 34.
  (/Users/hmadams/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ot1bch.fd
 File: ot1bch.fd 2004/10/18 font definitions for OT1/bch.
 ) (/Users/hmadams/Library/TinyTeX/texmf-dist/tex/latex/l3kernel/l3backend-pdftex.def
 File: l3backend-pdftex.def 2026-08-10 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count371
+\l__color_backend_stack_int=\count375
 ) (./report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/jkp/m/it on input line 30.
-LaTeX Font Info:    Trying to load font information for OML+jkp on input line 30.
+LaTeX Font Info:    Checking defaults for OML/jkp/m/it on input line 34.
+LaTeX Font Info:    Trying to load font information for OML+jkp on input line 34.
  (/Users/hmadams/Library/TinyTeX/texmf-dist/tex/latex/kpfonts/omljkp.fd
 File: omljkp.fd 2006/08/15 v1.0
 )
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for OMS/jkp/m/n on input line 30.
-LaTeX Font Info:    Trying to load font information for OMS+jkp on input line 30.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for OMS/jkp/m/n on input line 34.
+LaTeX Font Info:    Trying to load font information for OMS+jkp on input line 34.
  (/Users/hmadams/Library/TinyTeX/texmf-dist/tex/latex/kpfonts/omsjkp.fd
 File: omsjkp.fd 2006/08/15 v1.0
 )
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for OMX/jkp/m/n on input line 30.
-LaTeX Font Info:    Trying to load font information for OMX+jkp on input line 30.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for OMX/jkp/m/n on input line 34.
+LaTeX Font Info:    Trying to load font information for OMX+jkp on input line 34.
  (/Users/hmadams/Library/TinyTeX/texmf-dist/tex/latex/kpfonts/omxjkp.fd
 File: omxjkp.fd 2006/08/15 v1.0
 )
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for U/jkpexa/m/n on input line 30.
-LaTeX Font Info:    Trying to load font information for U+jkpexa on input line 30.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for U/jkpexa/m/n on input line 34.
+LaTeX Font Info:    Trying to load font information for U+jkpexa on input line 34.
  (/Users/hmadams/Library/TinyTeX/texmf-dist/tex/latex/kpfonts/ujkpexa.fd
 File: ujkpexa.fd 2006/08/15 v1.0
 )
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1088,15 +1107,15 @@ Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: hypcap package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package backref Info: ** backref set up for natbib ** on input line 30.
-Package hyperref Info: Link coloring ON on input line 30.
+Package backref Info: ** backref set up for natbib ** on input line 34.
+Package hyperref Info: Link coloring ON on input line 34.
 (./report.out) (./report.out)
 \@outlinefile=\write4
 \openout4 = `report.out'.
 
 Package babel Info: Main language set to 'english'.
  (./titlepage.tex
-<figures/uw.png, id=19, 505.89pt x 202.8378pt>
+<figures/uw.png, id=15, 505.89pt x 202.8378pt>
 File: figures/uw.png Graphic file (type png)
 <use figures/uw.png>
 Package pdftex.def Info: figures/uw.png  used on input line 5.
@@ -1126,56 +1145,61 @@ LaTeX Font Info:    Trying to load font information for U+lasy on input line 16.
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 ) [1
 
-{/Users/hmadams/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/Users/hmadams/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc} <./figures/uw.png>]) (./sections/odometry.tex (./sections/odometry_numbers.tex)
-<figures/odometry_results.pdf, id=30, 505.89pt x 227.6505pt>
-File: figures/odometry_results.pdf Graphic file (type pdf)
-<use figures/odometry_results.pdf>
-Package pdftex.def Info: figures/odometry_results.pdf  used on input line 7.
-(pdftex.def)             Requested size: 513.11745pt x 230.90822pt.
-) (./sections/imu.tex
-<figures/imu_results.pdf, id=32, 505.89pt x 155.38051pt>
-File: figures/imu_results.pdf Graphic file (type pdf)
-<use figures/imu_results.pdf>
-Package pdftex.def Info: figures/imu_results.pdf  used on input line 6.
-(pdftex.def)             Requested size: 513.11745pt x 157.60402pt.
- [1 <./figures/odometry_results.pdf> <./figures/imu_results.pdf>]) (./sections/lidar_mapping.tex
-<figures/lidar_results.pdf, id=80, 505.89pt x 144.54pt>
-File: figures/lidar_results.pdf Graphic file (type pdf)
-<use figures/lidar_results.pdf>
-Package pdftex.def Info: figures/lidar_results.pdf  used on input line 10.
-(pdftex.def)             Requested size: 505.89pt x 144.54182pt.
-<figures/map_results.pdf, id=81, 231.26399pt x 166.22101pt>
-File: figures/map_results.pdf Graphic file (type pdf)
-<use figures/map_results.pdf>
-Package pdftex.def Info: figures/map_results.pdf  used on input line 17.
-(pdftex.def)             Requested size: 231.26378pt x 166.22818pt.
-)
+{/Users/hmadams/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/Users/hmadams/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc} <./figures/uw.png>])
+<figures/fig_point_P.pdf, id=26, 503.78197pt x 222.75032pt>
+File: figures/fig_point_P.pdf Graphic file (type pdf)
+<use figures/fig_point_P.pdf>
+Package pdftex.def Info: figures/fig_point_P.pdf  used on input line 51.
+(pdftex.def)             Requested size: 513.11745pt x 226.88962pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [1 <./figures/fig_point_P.pdf>]
+<figures/fig_tuning.pdf, id=105, 504.0594pt x 115.75056pt>
+File: figures/fig_tuning.pdf Graphic file (type pdf)
+<use figures/fig_tuning.pdf>
+Package pdftex.def Info: figures/fig_tuning.pdf  used on input line 83.
+(pdftex.def)             Requested size: 513.11745pt x 117.84323pt.
+<figures/fig_trajectories.pdf, id=107, 497.24782pt x 172.64124pt>
+File: figures/fig_trajectories.pdf Graphic file (type pdf)
+<use figures/fig_trajectories.pdf>
+Package pdftex.def Info: figures/fig_trajectories.pdf  used on input line 101.
+(pdftex.def)             Requested size: 513.11745pt x 178.17017pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [2 <./figures/fig_tuning.pdf>]
 \tf@thm=\write5
 \openout5 = `report.thm'.
 
- [2
-
- <./figures/lidar_results.pdf> <./figures/map_results.pdf>] (./report.aux)
+ [3 <./figures/fig_trajectories.pdf>] (./report.aux)
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-08-10>
  ***********
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: AE935AA0D5E4D45D28186F1216B94C81;648.
+(rerunfilecheck)             Checksum: 33AB12A323A56298529E89BCEBD03E06;681.
  ) 
 Here is how much of TeX's memory you used:
- 29582 strings out of 469046
- 564375 string characters out of 5456947
- 944056 words of memory out of 5000000
- 58127 multiletter control sequences out of 15000+600000
- 664887 words of font info for 115 fonts, out of 8000000 for 9000
+ 29607 strings out of 469046
+ 564309 string characters out of 5456947
+ 957706 words of memory out of 5000000
+ 58157 multiletter control sequences out of 15000+600000
+ 667496 words of font info for 119 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 112i,12n,111p,867b,507s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/bitstrea/charter/bchb8a.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/bitstrea/charter/bchr8a.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/public/kpfonts/jkpmi.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/public/kpfonts/jkpmia.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/public/kpfonts/jkpmn8a.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/public/kpfonts/jkpsy.pfb>
-Output written on report.pdf (3 pages, 425929 bytes).
+ 112i,13n,111p,1180b,515s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/bitstrea/charter/bchb8a.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/bitstrea/charter/bchr8a.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/bitstrea/charter/bchri8a.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/public/kpfonts/jkpex.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/public/kpfonts/jkpmi.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/public/kpfonts/jkpmn8a.pfb></Users/hmadams/Library/TinyTeX/texmf-dist/fonts/type1/public/kpfonts/jkpsy.pfb>
+Output written on report.pdf (4 pages, 203030 bytes).
 PDF statistics:
- 162 PDF objects out of 1000 (max. 8388607)
- 104 compressed objects within 2 object streams
+ 278 PDF objects out of 1000 (max. 8388607)
+ 108 compressed objects within 2 object streams
  11 named destinations out of 1000 (max. 500000)
- 62 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 49 words of extra memory for PDF output out of 10000 (max. 10000000)
 

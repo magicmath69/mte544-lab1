@@ -1,0 +1,16 @@
+\section{IMU results and discussion}
+Figure~\ref{fig:imu} shows logged IMU-frame accelerations (specific force) and $z$-axis angular rate.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{figures/imu_results.pdf}
+\caption{Raw IMU samples on shared scales; acceleration uses left axes and angular rate right. Fluctuations may include motion and measurement effects.}
+\label{fig:imu}
+\end{figure}
+
+\clearpage
+\textbf{Circle:} Over 15.81~s, $\omega_z$ settles to $0.402$~rad/s (mean over 2--15~s). Full-run mean $a_y=0.0594$~m/s$^2$ is consistent with inward acceleration if IMU $y$ points left during level motion.
+
+\textbf{Spiral:} Over 90.82~s, early angular-rate variations settle to $0.403$~rad/s (mean over 25--90~s). Full-run mean $a_y=0.0390$~m/s$^2$ is similarly compatible with inward acceleration under that alignment.
+
+\textbf{Line:} Over 12.19~s, mean $\omega_z=5.4\times10^{-4}$~rad/s indicates little net rotation. Means $a_x=0.0017$, $a_y=-0.0010$~m/s$^2$ are near zero, with smaller $a_y$ fluctuations. A small signed $a_x$ mean does not prove constant velocity; odometry shows speed increasing.
