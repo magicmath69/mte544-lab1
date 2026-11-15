@@ -28,3 +28,11 @@ lab1/report/*.out
 lab1/report/*.thm
 lab1/report/*.toc
 lab1/report/*.synctex.gz
+lab3/report/*.aux
+lab3/report/*.log
+lab3/report/*.out
+lab3/report/*.thm
+lab3/report/*.toc
+lab3/report/*.synctex.gz
+lab3/report/*.fls
+lab3/report/*.fdb_latexmk
