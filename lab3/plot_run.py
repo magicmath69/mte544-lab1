@@ -1,6 +1,5 @@
-# Claude: plots one run's log to compare the EKF with the odometry (and the IMU) in the lab.
-# Claude: usage:  python3 plot_run.py                     newest log in runs/
-# Claude:         python3 plot_run.py runs/<file>.csv     that log (give several files for one figure each)
+# plots a run's log: EKF estimate vs odometry/IMU measurements
+# usage: python3 plot_run.py [runs/<file>.csv ...]   (default: newest log in runs/)
 import sys
 import os
 import glob
@@ -11,11 +10,11 @@ import matplotlib.pyplot as plt
 RUNS_DIR="runs"
 
 
-# Claude: reads a Logger csv (lines like "a, b, c, ") into {column name: numpy array}
+# Logger csv -> {column name: array}
 def read_log(path):
     with open(path) as file:
         rows=[[cell.strip() for cell in line.split(",") if cell.strip()] for line in file if line.strip()]
-    data=np.array(rows[1:], dtype=float).reshape(-1, len(rows[0]))    # Claude: reshape so a log with no data rows (run stopped early) stays 2-D
+    data=np.array(rows[1:], dtype=float).reshape(-1, len(rows[0]))
     return {name: data[:, i] for i, name in enumerate(rows[0])}
 
 
@@ -27,8 +26,7 @@ def plot_run(path):
 
     t=(log["stamp"] - log["stamp"][0]) / 1e9
 
-    # Claude: the EKF always starts at (0, 0, 0). Odometry is moved into its own start frame so it starts there too,
-    # Claude: which makes the comparison right even if the odometry wasn't reset before the run.
+    # EKF starts at (0, 0, 0): move odometry into its start frame in case it wasn't reset
     x0, y0, th0=log["odom_x"][0], log["odom_y"][0], log["odom_th"][0]
     dx, dy=log["odom_x"] - x0, log["odom_y"] - y0
     odom_x=np.cos(th0)*dx + np.sin(th0)*dy
