@@ -76,9 +76,9 @@ class localization(Node):
 
             # TODO PART 5 Put the Q and R matrices
             # that you conclude from lab Three
-            # Lab 3 values (per-sensor values used as they performed best): Q = 0.25*I,
+            # Lab 3 values (per-sensor R used as it performed best), Q raised from Lab 3's 0.25*I to 0.375*I in Lab 4,
             # R taken from the Lab 1 sensor variances for [v (odom), w (odom), ax (IMU), ay (IMU)], P0 = Q
-            Q=0.25*np.eye(6)
+            Q=0.375*np.eye(6)
             R=np.diag([2e-5, 2e-4, 0.05, 0.06])
             P=Q.copy()
 

@@ -1,4 +1,3 @@
-
 from mapUtilities import *
 from a_star import *
 
@@ -34,8 +33,8 @@ class planner:
         # TODO PART 5 Create the cost-map, the laser_sig is 
         # the standard deviation for the gausiian for which
         # the mean is located on the occupant grid.
-        # cells with cost > 0.8 are walls for A*. grid as 0.3 m blocks ~0.2 m, about the robot's radius
-        self.m_utilites=mapManipulator(filename_=self.mapName, laser_sig=0.3)
+        # cells with cost > 0.8 are walls for A*. exp(-d^2/2sig^2) > 0.8 for d < 0.67*sig, so 0.4 m blocks ~0.27 m (robot radius + margin)
+        self.m_utilites=mapManipulator(filename_=self.mapName, laser_sig=0.4)
             
         self.costMap=self.m_utilites.make_likelihood_field()
         

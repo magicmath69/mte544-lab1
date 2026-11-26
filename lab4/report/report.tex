@@ -1,0 +1,123 @@
+\documentclass[11pt,twoside,letterpaper]{article}
+\newcommand{\reporttitle}{Lab 4: Path Planning with A* on a SLAM Map}
+\newcommand{\reportauthorOne}{Adams, Hunter}
+\newcommand{\cidOne}{20997503}
+\newcommand{\reportauthorTwo}{Chen, Joe}
+\newcommand{\cidTwo}{20998545}
+\newcommand{\reportauthorThree}{Wielowieyski, Jacob}
+\newcommand{\cidThree}{21004619}
+\newcommand{\robotNumber}{7}     % TODO check: robot used in lab 4
+\newcommand{\stationNumber}{151} % TODO check: station used in lab 4
+\date{\today}
+\input{includes}
+\input{notation}
+\usepackage{booktabs}
+\geometry{left=0.7in,right=0.7in,top=0.55in,bottom=0.55in,headheight=14.5pt,headsep=10pt,footskip=20pt}
+\setlength{\headwidth}{\textwidth}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlength{\textfloatsep}{6pt}
+\setlength{\floatsep}{6pt}
+\setlength{\intextsep}{5pt}
+\setlength{\abovedisplayskip}{4pt}\setlength{\belowdisplayskip}{4pt}
+\captionsetup{margin=0pt,font=small,labelfont=bf,skip=3pt}
+\renewcommand{\topfraction}{0.95}\renewcommand{\bottomfraction}{0.95}\renewcommand{\textfraction}{0.03}\renewcommand{\floatpagefraction}{0.9}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0pt}{7pt}{4pt}{\large\bfseries}}
+\makeatother
+\newcommand{\para}[1]{\textbf{#1}\quad}
+\newcommand{\TODO}[1]{\textcolor{red}{\textbf{TODO:} #1}}   % delete every \TODO before submitting
+\fancyhf{}
+\fancyhead[LO,LE]{\small MTE544 -- Lab 4}
+\fancyhead[RO,RE]{\small Path Planning with A*}
+\fancyfoot[CO,CE]{\small \thepage}
+\hypersetup{pdftitle={MTE544 Lab 4: Path Planning with A*},pdfauthor={Hunter Adams, Joe Chen, Jacob Wielowieyski}}
+\begin{document}
+\input{titlepage}
+\setcounter{page}{1}
+\pagestyle{fancy}
+
+\TODO{Check the Lab 4 handout/rubric on LEARN and rename or reorder the sections below to match it.}
+
+%=====================================================================================================
+\section{Map of the room (Part 3)}
+
+The map was built with SLAM toolbox on the TurtleBot~4, driving with teleop from our start mark on the tape, and saved with \texttt{map\_saver\_cli}, and the turtlebot3 cartographer.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=\textwidth]{figures/fig_map.pdf}
+  \caption{(a) Occupancy map from SLAM (black: occupied, white: free, grey: unknown).
+  (b) Cost map used by A*: a Gaussian of each cell's distance to the nearest obstacle, $\sigma=0.4$\,m. Cells with cost $>0.8$ (inside the blue contour) are treated as walls.}
+  \label{fig:map}
+\end{figure}
+\TODO{comment on map quality, variation in sigma}
+%=====================================================================================================
+\section{A* and the cost map (Parts 4--5)}
+
+\para{A*.} Search on the cost-map grid, 8-connected. Each node keeps $g$ (cost from the start), $h$ (heuristic to goal, in cells) and $f=g+h$; the open node with the lowest $f$ is expanded next. Moving to cell $n'$ costs the step length plus that cell's cost-map value:
+\begin{equation*}
+g(n')=g(n)+\underbrace{\{1,\sqrt2\}}_{\text{straight, diagonal}}+c(n'),\qquad
+h_{\text{euclidean}}=\sqrt{\Delta x^2+\Delta y^2},\qquad h_{\text{manhattan}}=|\Delta x|+|\Delta y|
+\end{equation*}
+\TODO{Euclidean never overestimates, manhatten can, Manhatten can lead to going closer to walls in instances with large heurstic costs}
+
+\para{Cost map.} $c(d)=\exp\!\left(-d^2/2\sigma^2\right)$, with $d$ the distance to the nearest occupied cell.
+$c>0.8$ for $d<\sigma\sqrt{2\ln1.25}\approx0.67\sigma$.
+We raised $\sigma$ from 0.3 to 0.4\,m in lab, so the blocked band grew from 0.20 to 0.27\,m.
+
+\para{Settings carried over.}
+\begin{itemize}\setlength\itemsep{0pt}
+  \item Localization: EKF from Lab~3, $\mat{R}=\mathrm{diag}(2\times10^{-5},\,2\times10^{-4},\,0.05,\,0.06)$, $\mat{Q}$ raised from $0.25\,\mat{I}$ to $0.375\,\mat{I}$ in lab. Measured from uncertainty in respective sensors.
+  \item Trajectory controller (Lab~2): $k_{p}=0.2,\ k_{d}=0.05,\ k_{i}=0.025$ (linear), $k_{p}=1.0,\ k_{d}=0.2,\ k_{i}=0.025$ (angular).
+  \item Goal reached when the EKF position is within 5\,cm of the last path point.
+\end{itemize}
+
+%=====================================================================================================
+\section{Results}
+
+\para{Robot runs (Fig.~\ref{fig:runs}).} Both runs start at the tape mark, use the Euclidean heuristic and the EKF, with the goal set by 2D Goal Pose in RViz.
+The EKF stopped within the 5\,cm threshold of the goal, and the odometry agrees within 1.2--1.4\,cm.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=\textwidth]{figures/fig_runs.pdf}
+  \caption{The two runs that reached their goal, cut at the goal. (a) 3.45\,m path, goal reached after 289\,s. (b) 6.34\,m path, goal reached after 77\,s.
+  EKF and odometry stay within 6\,cm of each other and follow the planned path closely. \TODO{comment on corner cutting / overshoot at turns.}}
+  \label{fig:runs}
+\end{figure}
+
+\para{Heuristics (Fig.~\ref{fig:heur}).} Only the Euclidean heuristic was driven. To compare, the start and goal of both runs were planned again offline with \texttt{planner.py} (same map, same cost map, $\sigma=0.4$\,m) using each heuristic.
+The Euclidean paths are identical, cell for cell, to the ones the robot followed, so the offline planner matches what the robot ran.
+
+\begin{figure}[H]
+  \centering\includegraphics[width=\textwidth]{figures/fig_heuristics.pdf}
+  \caption{A* paths from \texttt{planner.py} for both heuristics, with path length and the robot's time to completion (Euclidean only; Manhattan was not driven).
+  (a) Manhattan takes a slightly different route near $(1.1,1.2)$\,m. (b) Same length, but Manhattan cuts closer to the wall at $(2.5,0.5)$\,m.}
+  \label{fig:heur}
+\end{figure}
+
+\begin{table}[H]\centering\small
+\caption{Path length per heuristic and time to completion on the robot, numbers from \texttt{report/figures/numbers.json}.}
+\begin{tabular}{llrr}\toprule
+Goal & Heuristic & Path length [m] & Time to completion [s]\\\midrule
+(a) $(2.31,2.14)$ & Euclidean & 3.45 & 289\\
+                  & Manhattan & 3.47 & not driven\\
+(b) $(5.16,-0.56)$ & Euclidean & 6.34 & 77\\
+                   & Manhattan & 6.34 & not driven\\\bottomrule
+\end{tabular}
+\label{tab:heur}
+\end{table}
+
+%=====================================================================================================
+\section{Discussion}
+
+\para{Euclidean vs.\ Manhattan.} Manhatten and Euclidean both result in similar distances in operational distance and time, but Manhatten tries to reduce the larger heuristic cost and leads to veering closer to walls and obstacles, which for this applciation is undesireable. 
+With diagonal moves Manhattan overestimates the remaining cost (a diagonal step costs $\sqrt2$, Manhattan counts 2), so A* pushes harder toward the goal and can stop at a path that is not the cheapest. Euclidean never overestimates, so its path is optimal for this cost map, at the price of searching more nodes.
+On this map both plan in neglibile time, so the speed-up does not matter here; it would on a larger map or with frequent replanning.
+
+\para{Effect of the cost map.}
+
+\para{Localization.} 
+
+\para{Limitations and improvements.}
+
+\end{document}

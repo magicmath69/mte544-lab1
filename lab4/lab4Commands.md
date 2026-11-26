@@ -58,7 +58,7 @@ A* treats cells with cost > 0.8 as walls (everything within about 0.67 × `laser
 and adds the cost of each cell it steps on, so paths also keep away from walls.
 To change it, edit the number in `initTrajectoryPlanner` in `planner.py`:
 ```python
-self.m_utilites=mapManipulator(filename_=self.mapName, laser_sig=0.3)
+self.m_utilites=mapManipulator(filename_=self.mapName, laser_sig=0.4)
 ```
 - Smaller (e.g. 0.2): narrower blocked band, use it if A* says "no path found" in narrow corridors.
 - Larger: more clearance from walls, but doorways/corridors may close.

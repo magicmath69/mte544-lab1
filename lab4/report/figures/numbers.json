@@ -1,0 +1,62 @@
+{
+ "laser_sig": 0.4,
+ "blocked_radius_m": 0.267,
+ "20261125-165419_euclidean_ekf": {
+  "time_to_goal_s": 289.0,
+  "path_len_m": 3.45,
+  "path_cells": 55,
+  "start": [
+   -0.04,
+   -0.01
+  ],
+  "goal": [
+   2.31,
+   2.14
+  ],
+  "final_odom_to_goal_m": 0.012,
+  "final_ekf_to_goal_m": 0.042,
+  "max_ekf_odom_gap_m": 0.06
+ },
+ "20261125-170619_euclidean_ekf": {
+  "time_to_goal_s": 77.1,
+  "path_len_m": 6.34,
+  "path_cells": 105,
+  "start": [
+   -0.04,
+   -0.01
+  ],
+  "goal": [
+   5.16,
+   -0.56
+  ],
+  "final_odom_to_goal_m": 0.014,
+  "final_ekf_to_goal_m": 0.04,
+  "max_ekf_odom_gap_m": 0.045
+ },
+ "heuristics_165419": {
+  "euclidean": {
+   "path_len_m": 3.45,
+   "cells": 55,
+   "time_to_completion_s": 289.0
+  },
+  "matches_logged_path": true,
+  "manhattan": {
+   "path_len_m": 3.47,
+   "cells": 56,
+   "time_to_completion_s": null
+  }
+ },
+ "heuristics_170619": {
+  "euclidean": {
+   "path_len_m": 6.34,
+   "cells": 105,
+   "time_to_completion_s": 77.1
+  },
+  "matches_logged_path": true,
+  "manhattan": {
+   "path_len_m": 6.34,
+   "cells": 105,
+   "time_to_completion_s": null
+  }
+ }
+}

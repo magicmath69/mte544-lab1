@@ -8,6 +8,14 @@ git clone -b LabThree https://github.com/magicmath69/mte544-lab1.git mte544
 cd mte544/lab3
 ```
 
+## Every new terminal
+```bash
+source ~/robohub/turtlebot4/configs/.bashrc
+export TURTLEBOT3_MODEL=burger                       # sim only
+export ROS_DOMAIN_ID=X                               # lab only, X = robot number
+```
+If `turtlebot3_gazebo` is still not found: `ls /opt/ros`, then `source /opt/ros/<distro>/setup.bash` (e.g. `humble`).
+
 ## Simulation (VM)
 Terminal 1:
 ```bash
