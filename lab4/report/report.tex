@@ -6,9 +6,9 @@
 \newcommand{\cidTwo}{20998545}
 \newcommand{\reportauthorThree}{Wielowieyski, Jacob}
 \newcommand{\cidThree}{21004619}
-\newcommand{\robotNumber}{7}     % TODO check: robot used in lab 4
-\newcommand{\stationNumber}{151} % TODO check: station used in lab 4
-\date{\today}
+\newcommand{\robotNumber}{7}
+\newcommand{\stationNumber}{151}
+\date{November 26, 2026}
 \input{includes}
 \input{notation}
 \usepackage{booktabs}
@@ -26,83 +26,71 @@
 \renewcommand{\section}{\@startsection{section}{1}{0pt}{7pt}{4pt}{\large\bfseries}}
 \makeatother
 \newcommand{\para}[1]{\textbf{#1}\quad}
-\newcommand{\TODO}[1]{\textcolor{red}{\textbf{TODO:} #1}}   % delete every \TODO before submitting
 \fancyhf{}
 \fancyhead[LO,LE]{\small MTE544 -- Lab 4}
 \fancyhead[RO,RE]{\small Path Planning with A*}
-\fancyfoot[CO,CE]{\small \thepage}
+\fancyfoot[CO,CE]{\small \thepage\ / 3}
 \hypersetup{pdftitle={MTE544 Lab 4: Path Planning with A*},pdfauthor={Hunter Adams, Joe Chen, Jacob Wielowieyski}}
 \begin{document}
 \input{titlepage}
 \setcounter{page}{1}
 \pagestyle{fancy}
 
-\TODO{Check the Lab 4 handout/rubric on LEARN and rename or reorder the sections below to match it.}
-
 %=====================================================================================================
 \section{Map of the room (Part 3)}
 
-The map was built with SLAM toolbox on the TurtleBot~4, driving with teleop from our start mark on the tape, and saved with \texttt{map\_saver\_cli}, and the turtlebot3 cartographer.
+We reset odometry with the TurtleBot~4 on the tape at the entrance, drove it around the room with teleop, and saved the SLAM map with \texttt{map\_saver\_cli}. The map resolves the walls along both routes at 5\,cm per cell (Fig.~\ref{fig:map}). Grey regions show unobserved space, and scattered occupied cells near the entrance add local peaks to the cost map.
 
 \begin{figure}[H]
   \centering\includegraphics[width=\textwidth]{figures/fig_map.pdf}
-  \caption{(a) Occupancy map from SLAM (black: occupied, white: free, grey: unknown).
-  (b) Cost map used by A*: a Gaussian of each cell's distance to the nearest obstacle, $\sigma=0.4$\,m. Cells with cost $>0.8$ (inside the blue contour) are treated as walls.}
+  \caption{(a) SLAM occupancy map. Black cells are occupied, white cells are free, and grey cells are unknown.
+  (b) Cost map used by A* with $\sigma=0.4$\,m. The blue contour encloses cells with cost above 0.8, which the planner skips.}
   \label{fig:map}
 \end{figure}
-\TODO{comment on map quality, variation in sigma}
-%=====================================================================================================
-\section{A* and the cost map (Parts 4--5)}
 
-\para{A*.} Search on the cost-map grid, 8-connected. Each node keeps $g$ (cost from the start), $h$ (heuristic to goal, in cells) and $f=g+h$; the open node with the lowest $f$ is expanded next. Moving to cell $n'$ costs the step length plus that cell's cost-map value:
+%=====================================================================================================
+\section{Path planning and navigation (Parts 4--5)}
+
+\para{Map and goal.} \texttt{mapPublisher.py} publishes the map for RViz and aligns the map and odometry frames. To keep the frames aligned, we reset odometry at the same tape mark for mapping and testing. When RViz sends a 2D goal, \texttt{decisions.py} passes the current EKF position and goal position to \texttt{planner.py}. The planner uses \texttt{mapManipulator} to load the map, build the cost grid, and convert metric positions to grid cells.
+
+\para{A* search.} Each node stores the cost from the start $g$, the estimated cost to the goal $h$, and their sum $f=g+h$. A* expands the open node with the lowest $f$ and checks its eight neighbors. It skips cells outside the grid or above the cost threshold. Moving to cell $n'$ adds the step length and its cost-map value.
 \begin{equation*}
 g(n')=g(n)+\underbrace{\{1,\sqrt2\}}_{\text{straight, diagonal}}+c(n'),\qquad
 h_{\text{euclidean}}=\sqrt{\Delta x^2+\Delta y^2},\qquad h_{\text{manhattan}}=|\Delta x|+|\Delta y|
 \end{equation*}
-\TODO{Euclidean never overestimates, manhatten can, Manhatten can lead to going closer to walls in instances with large heurstic costs}
+Here $c(d)=\exp(-d^2/2\sigma^2)$, where $d$ is the distance to the nearest occupied cell in metres. The threshold $c>0.8$ blocks cells within approximately $0.67\sigma$ of an obstacle. When A* reaches the goal cell, the planner follows the stored parent links to recover the path and converts it into $(x,y)$ waypoints in metres.
 
-\para{Cost map.} $c(d)=\exp\!\left(-d^2/2\sigma^2\right)$, with $d$ the distance to the nearest occupied cell.
-$c>0.8$ for $d<\sigma\sqrt{2\ln1.25}\approx0.67\sigma$.
-We raised $\sigma$ from 0.3 to 0.4\,m in lab, so the blocked band grew from 0.20 to 0.27\,m.
+\para{Path following.} The Lab~3 EKF fuses odometry velocities and IMU accelerations with $\mat{Q}=\mat{P}_0=0.375\,\mat{I}$ and $\mat{R}=\mathrm{diag}(2\times10^{-5},\,2\times10^{-4},\,0.05,\,0.06)$. The Lab~2 controller uses distance to the last waypoint for the linear PID and heading error to a point three waypoints ahead of the nearest waypoint for the angular PID. The linear gains $(k_{lp},k_{lv},k_{li})$ are $(0.2,0.05,0.025)$ and the angular gains $(k_{ap},k_{av},k_{ai})$ are $(1.0,0.2,0.025)$. The node sends forward speed up to 0.1\,m/s and yaw rate within $\pm0.5$\,rad/s on \texttt{/cmd\_vel}. It sends a zero command when the EKF position is within 5\,cm of the last waypoint.
 
-\para{Settings carried over.}
-\begin{itemize}\setlength\itemsep{0pt}
-  \item Localization: EKF from Lab~3, $\mat{R}=\mathrm{diag}(2\times10^{-5},\,2\times10^{-4},\,0.05,\,0.06)$, $\mat{Q}$ raised from $0.25\,\mat{I}$ to $0.375\,\mat{I}$ in lab. Measured from uncertainty in respective sensors.
-  \item Trajectory controller (Lab~2): $k_{p}=0.2,\ k_{d}=0.05,\ k_{i}=0.025$ (linear), $k_{p}=1.0,\ k_{d}=0.2,\ k_{i}=0.025$ (angular).
-  \item Goal reached when the EKF position is within 5\,cm of the last path point.
-\end{itemize}
-
+\clearpage
 %=====================================================================================================
-\section{Results}
+\section{Results (Part 6)}
 
-\para{Robot runs (Fig.~\ref{fig:runs}).} Both runs start at the tape mark, use the Euclidean heuristic and the EKF, with the goal set by 2D Goal Pose in RViz.
-The EKF stopped within the 5\,cm threshold of the goal, and the odometry agrees within 1.2--1.4\,cm.
+\para{Robot runs (Fig.~\ref{fig:runs}).} Two of the five logged Euclidean runs reached the goal threshold. Both runs started at the entrance tape and used goals set in RViz. We measured elapsed drive time from the first logged linear PID update to the first EKF sample within 5\,cm of the last waypoint.
 
 \begin{figure}[H]
   \centering\includegraphics[width=\textwidth]{figures/fig_runs.pdf}
-  \caption{The two runs that reached their goal, cut at the goal. (a) 3.45\,m path, goal reached after 289\,s. (b) 6.34\,m path, goal reached after 77\,s.
-  EKF and odometry stay within 6\,cm of each other and follow the planned path closely. \TODO{comment on corner cutting / overshoot at turns.}}
+  \caption{Planned Euclidean paths and logged robot trajectories. (a) Run 16:54:19 to $(2.31,2.14)$\,m. (b) Run 17:06:19 to $(5.16,-0.56)$\,m. The traces end at the first EKF sample within the goal threshold.}
   \label{fig:runs}
 \end{figure}
 
-\para{Heuristics (Fig.~\ref{fig:heur}).} Only the Euclidean heuristic was driven. To compare, the start and goal of both runs were planned again offline with \texttt{planner.py} (same map, same cost map, $\sigma=0.4$\,m) using each heuristic.
-The Euclidean paths are identical, cell for cell, to the ones the robot followed, so the offline planner matches what the robot ran.
+\para{Heuristics (Fig.~\ref{fig:heur}).} We replanned from each run's logged start to its goal with both heuristics using the same map and $\sigma=0.4$\,m. The offline Euclidean plans reproduced the logged plans cell for cell. Table~\ref{tab:heur} lists path lengths and costs for both heuristics and drive times for the Euclidean runs.
 
 \begin{figure}[H]
   \centering\includegraphics[width=\textwidth]{figures/fig_heuristics.pdf}
-  \caption{A* paths from \texttt{planner.py} for both heuristics, with path length and the robot's time to completion (Euclidean only; Manhattan was not driven).
-  (a) Manhattan takes a slightly different route near $(1.1,1.2)$\,m. (b) Same length, but Manhattan cuts closer to the wall at $(2.5,0.5)$\,m.}
+  \caption{Offline plans for the same two start and goal pairs with the Euclidean and Manhattan heuristics. The paths diverge near $(1.1,1.2)$\,m in (a) and along the turns in (b).}
   \label{fig:heur}
 \end{figure}
 
+\clearpage
 \begin{table}[H]\centering\small
-\caption{Path length per heuristic and time to completion on the robot, numbers from \texttt{report/figures/numbers.json}.}
-\begin{tabular}{llrr}\toprule
-Goal & Heuristic & Path length [m] & Time to completion [s]\\\midrule
-(a) $(2.31,2.14)$ & Euclidean & 3.45 & 289\\
-                  & Manhattan & 3.47 & not driven\\
-(b) $(5.16,-0.56)$ & Euclidean & 6.34 & 77\\
-                   & Manhattan & 6.34 & not driven\\\bottomrule
+\caption{Planned path length, A* cost (grid-step lengths plus cell penalties), and elapsed drive time for each goal.}
+\begin{tabular}{llrrr}\toprule
+Goal & Heuristic & Path length [m] & A* cost & Drive time [s]\\\midrule
+(a) $(2.31,2.14)$ & Euclidean & 3.45 & 96.5 & 40.5\\
+                  & Manhattan & 3.47 & 97.1 & --\\
+(b) $(5.16,-0.56)$ & Euclidean & 6.34 & 175.6 & 67.5\\
+                   & Manhattan & 6.34 & 178.5 & --\\\bottomrule
 \end{tabular}
 \label{tab:heur}
 \end{table}
@@ -110,14 +98,12 @@ Goal & Heuristic & Path length [m] & Time to completion [s]\\\midrule
 %=====================================================================================================
 \section{Discussion}
 
-\para{Euclidean vs.\ Manhattan.} Manhatten and Euclidean both result in similar distances in operational distance and time, but Manhatten tries to reduce the larger heuristic cost and leads to veering closer to walls and obstacles, which for this applciation is undesireable. 
-With diagonal moves Manhattan overestimates the remaining cost (a diagonal step costs $\sqrt2$, Manhattan counts 2), so A* pushes harder toward the goal and can stop at a path that is not the cheapest. Euclidean never overestimates, so its path is optimal for this cost map, at the price of searching more nodes.
-On this map both plan in neglibile time, so the speed-up does not matter here; it would on a larger map or with frequent replanning.
+\para{Euclidean vs.\ Manhattan.} Euclidean gave the lower A* cost for both goals. For goal (b), each route was 6.34\,m long, and the cost difference came from the higher obstacle penalties along the Manhattan route. Its waypoints averaged 48.1\,cm from occupied cells, compared with 50.5\,cm for Euclidean. Both routes had the same minimum of 28.3\,cm. Manhattan counts a one-cell diagonal displacement as 2, although a diagonal step costs $\sqrt{2}$ before the obstacle penalty. It can therefore overestimate the remaining cost. Straight-line distance is a lower bound on this grid, which makes Euclidean the better choice for minimizing the specified path cost.
 
-\para{Effect of the cost map.}
+\para{Effect of the cost map.} Increasing $\sigma$ from 0.30 to 0.40\,m widened the blocked band from 20 to 27\,cm. When we replanned offline, the minimum distance from a waypoint to an occupied cell on Euclidean route (b) increased from 21.2 to 28.3\,cm, and route (a) stayed the same. The larger setting gives the planner more clearance where space is available and can close narrow passages.
 
-\para{Localization.} 
+\para{Localization and tracking.} During each successful run, the EKF estimates averaged 0.7\,cm from the nearest segment of the plan. The corresponding odometry averages were 2.0 and 1.2\,cm. The largest EKF deviations, 7.1 and 3.8\,cm, occurred near the start. The three-waypoint lookahead lets the robot turn before it reaches a bend, so some smoothing is expected. At the end of runs (a) and (b), the EKF estimates were 4.8 and 4.9\,cm from the last waypoint. The controller uses the EKF estimate, which shares odometry measurements with the raw pose. Checking absolute position accuracy would require an independent reference.
 
-\para{Limitations and improvements.}
+\para{Limitations and improvements.} The Manhattan results cover offline planning. Repeating both heuristics from the same start and goal positions would allow a comparison of drive time, tracking error, and repeatability. The planner inflates occupied cells, so a route into unknown space would require a rule for handling unobserved cells.
 
 \end{document}

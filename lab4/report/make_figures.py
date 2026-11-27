@@ -1,120 +1,250 @@
-# Lab 4 report figures (fig_map, fig_runs, fig_heuristics) and the numbers quoted in the report (numbers.json).
-# Usage, from lab4/:  python3 report/make_figures.py runs report/figures --map room      (needs numpy, pandas, matplotlib, scipy, scikit-learn)
-import os, glob, json, argparse
-import numpy as np, pandas as pd
-import matplotlib; matplotlib.use('Agg')
+"""Generate Lab 4 report figures and results from the saved map and run logs.
+
+From lab4/: python report/make_figures.py runs report/figures --map room
+Requires matplotlib, NumPy, pandas and SciPy. No ROS environment is needed.
+"""
+
+import argparse
+import json
+from pathlib import Path
+import sys
+
+import matplotlib
+
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from scipy.ndimage import distance_transform_edt
 
-ap = argparse.ArgumentParser()
-ap.add_argument('runs'); ap.add_argument('out'); ap.add_argument('--map', default='room')
-ap.add_argument('--laser_sig', type=float, default=0.4, help='same value as planner.py')
-ap.add_argument('--keep', nargs='+', default=['165419', '170619'], help='runs to show (the ones that reached their goal)')
-ap.add_argument('--xlim', type=float, nargs=2, default=[-1.5, 7.5]); ap.add_argument('--ylim', type=float, nargs=2, default=[-2.5, 3.5])
-A = ap.parse_args(); os.makedirs(A.out, exist_ok=True)
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from a_star import search
 
-INK, MUTED, ODOM, EKF, PATH, GRID = '#0b0b0b', '#52514e', '#3d3c39', '#2a78d6', '#eb6834', '#e3e2dd'
-plt.rcParams.update({'font.size': 7, 'axes.titlesize': 7, 'axes.labelsize': 7, 'xtick.labelsize': 6.5, 'ytick.labelsize': 6.5,
-    'legend.fontsize': 6.3, 'axes.linewidth': 0.6, 'axes.edgecolor': MUTED, 'axes.grid': True, 'grid.color': GRID,
-    'grid.linewidth': 0.5, 'axes.axisbelow': True, 'axes.spines.top': False, 'axes.spines.right': False,
-    'legend.framealpha': 0.9, 'legend.edgecolor': 'none', 'pdf.fonttype': 42, 'savefig.dpi': 300, 'axes.titlepad': 3})
 
-def load(f):
-    d = pd.read_csv(f, skipinitialspace=True)
-    d = d.loc[:, [c for c in d.columns if c.strip() and not c.startswith('Unnamed')]]
-    d.columns = [c.strip() for c in d.columns]
-    return d.apply(pd.to_numeric, errors='coerce')
+GOAL_RADIUS_M = 0.05
+BLOCKED_COST = 0.8
+PLAN = "#b84c0c"
+EKF = "#1757a5"
+ODOM = "#393838"
+START = "#246139"
+MANHATTAN = "#148369"
+
+
+def load_log(filename):
+    log = pd.read_csv(filename, skipinitialspace=True)
+    return log.rename(columns=str.strip)
+
 
 def read_map(name):
-    meta = dict(l.split(':', 1) for l in open(name + '.yaml') if ':' in l)
-    res = float(meta['resolution']); ox, oy = [float(v) for v in meta['origin'].strip(' []\n').split(',')[:2]]
-    with open(name + '.pgm', 'rb') as fh:
-        f = []
-        while len(f) < 4:
-            l = fh.readline(); f += [] if l.startswith(b'#') else l.split()
-        w, h = int(f[1]), int(f[2]); img = np.frombuffer(fh.read(w * h), np.uint8).reshape(h, w)
-    return img, res, [ox, ox + w * res, oy, oy + h * res]
+    lines = name.with_suffix(".yaml").read_text().splitlines()
+    meta = dict(line.split(":", 1) for line in lines if ":" in line)
+    resolution = float(meta["resolution"])
+    origin = np.array(json.loads(meta["origin"])[:2])
+    with name.with_suffix(".pgm").open("rb") as pgm:
+        header = []
+        while len(header) < 4:
+            line = pgm.readline()
+            if not line:
+                raise ValueError(f"Incomplete PGM header for {name}")
+            header.extend(line.partition(b"#")[0].split())
+        width, height = map(int, header[1:3])
+        image = np.frombuffer(pgm.read(width * height), dtype=np.uint8).reshape(height, width)
 
-img, res, ext = read_map(A.map)
-NUM = {'laser_sig': A.laser_sig, 'blocked_radius_m': round(0.668 * A.laser_sig, 3)}
+    # mapUtilities.cell_2_position assigns these coordinates to cell centers.
+    # Adjust the image edges by half a pixel to align the paths and map.
+    x_left, y_bottom = origin + resolution * np.array([-0.5, 0.5])
+    extent = [x_left, x_left + width * resolution, y_bottom, y_bottom + height * resolution]
+    return image, resolution, origin, extent
 
-# ---------------------------------------------------------------- Fig: map and cost map (same Gaussian as mapUtilities.make_likelihood_field)
-try:
-    from scipy.ndimage import distance_transform_edt
-    cost = np.exp(-(distance_transform_edt(img >= 10) * res) ** 2 / (2 * A.laser_sig ** 2))
-except ImportError:
-    cost = None
-fig, ax = plt.subplots(1, 2 if cost is not None else 1, figsize=(7.1, 2.8), squeeze=False); ax = ax[0]
-ax[0].imshow(img, cmap='gray', extent=ext); ax[0].set(title='(a) SLAM map (room.pgm)', xlabel='x [m]', ylabel='y [m]')
-if cost is not None:
-    im = ax[1].imshow(cost, cmap='magma_r', extent=ext, vmin=0, vmax=1)
-    ax[1].contour(np.flipud(cost) > 0.8, levels=[0.5], colors=[EKF], linewidths=0.6, extent=ext)
-    ax[1].set(title=rf'(b) Cost map, $\sigma$={A.laser_sig} m (blue: cost > 0.8, walls for A*)', xlabel='x [m]')
-    fig.colorbar(im, ax=ax[1], fraction=0.04, pad=0.02)
-fig.tight_layout(); fig.savefig(f'{A.out}/fig_map.pdf'); plt.close(fig)
 
-# ---------------------------------------------------------------- Fig: the runs that reached their goal
-# Each log is cut at the closest approach to the goal (goal reached); 165419's pose was reset afterwards.
-runs = [glob.glob(f'{A.runs}/*{r}*_pose.csv')[0] for r in A.keep]
-tasks = []   # (label, start, goal) of each run, replanned with both heuristics below
-fig, ax = plt.subplots(1, len(runs), figsize=(7.1, 2.5), squeeze=False); ax = ax[0]
-for k, (a, f) in enumerate(zip(ax, runs)):
-    name = os.path.basename(f)[:-len('_pose.csv')]; stem = f[:-len('_pose.csv')]; lbl = name.split('_')[0][-6:]
-    p, path = load(f), load(stem + '_path.csv')
-    gx, gy = path.x.iloc[-1], path.y.iloc[-1]
-    end = int(np.hypot(p.odom_x - gx, p.odom_y - gy).argmin()); p = p.iloc[:end + 1]
-    t = (p.stamp - p.stamp.iloc[0]) / 1e9
-    a.imshow(img, cmap='gray', extent=ext)
-    a.plot(path.x, path.y, '--', color=PATH, lw=1.0, label='A* path (Euclidean)')
-    a.plot(p.odom_x, p.odom_y, color=ODOM, lw=0.9, label='odometry')
-    a.plot(p.kf_x, p.kf_y, color=EKF, lw=0.9, label='EKF')
-    a.plot(p.odom_x.iloc[0], p.odom_y.iloc[0], 'o', color='tab:green', ms=3, label='start')
-    a.plot(gx, gy, 'x', color=PATH, ms=5, mew=1.5, label='goal')
-    a.set_title(f'({"ab"[k]}) Run {lbl}', loc='left'); a.set_aspect('equal'); a.set(xlim=A.xlim, ylim=A.ylim, xlabel='x [m]', ylabel='y [m]')
-    seg = np.hypot(np.diff(path.x), np.diff(path.y)).sum()
-    NUM[name] = dict(time_to_goal_s=round(float(t.iloc[-1]), 1), path_len_m=round(float(seg), 2), path_cells=len(path),
-                     start=[round(float(path.x.iloc[0]), 2), round(float(path.y.iloc[0]), 2)], goal=[round(float(gx), 2), round(float(gy), 2)],
-                     final_odom_to_goal_m=round(float(np.hypot(p.odom_x.iloc[-1] - gx, p.odom_y.iloc[-1] - gy)), 3),
-                     final_ekf_to_goal_m=round(float(np.hypot(p.kf_x.iloc[-1] - gx, p.kf_y.iloc[-1] - gy)), 3),
-                     max_ekf_odom_gap_m=round(float(np.hypot(p.kf_x - p.odom_x, p.kf_y - p.odom_y).max()), 3))
-    tasks.append((lbl, (path.x.iloc[0], path.y.iloc[0]), (gx, gy), path, float(t.iloc[-1])))
-ax[0].legend(loc='lower left', fontsize=5.5)
-fig.tight_layout(); fig.savefig(f'{A.out}/fig_runs.pdf'); plt.close(fig)
+def plot_map(ax, image, extent, title, xlim=None, ylim=None, **image_options):
+    raster = ax.imshow(image, extent=extent, interpolation="nearest", **image_options)
+    ax.set(title=title, xlabel="x [m]", ylabel="y [m]", xlim=xlim, ylim=ylim)
+    ax.grid(color="#727575", alpha=0.28, linewidth=0.45)
+    return raster
 
-# ---------------------------------------------------------------- Fig: Euclidean vs Manhattan, replanned offline with planner.py
-# planner.py -> mapUtilities.mapManipulator -> a_star.search, unchanged. Only the ROS imports are stubbed (no rclpy on a laptop);
-# the planner never publishes, so the stubs are never used.
-import sys, types
-class _Stub(types.ModuleType):
-    def __getattr__(self, n):
-        if n.startswith('__'): raise AttributeError(n)
-        return type(n, (), {'__init__': lambda self, *a, **k: None})
-for m in ['rclpy', 'rclpy.node', 'rclpy.qos', 'rclpy.time', 'sensor_msgs', 'sensor_msgs.msg', 'nav_msgs', 'nav_msgs.msg',
-          'geometry_msgs', 'geometry_msgs.msg', 'std_msgs', 'std_msgs.msg', 'tf_transformations']:
-    sys.modules.setdefault(m, _Stub(m))
-LAB4 = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, LAB4)
-cwd = os.getcwd(); os.chdir(LAB4)
-from planner import planner, TRAJECTORY_PLANNER
-HC = {'euclidean': PATH, 'manhattan': '#1baf7a'}
-fig, ax = plt.subplots(1, len(tasks), figsize=(7.1, 2.5), squeeze=False); ax = ax[0]
-for k, (a, (lbl, start, goal, logged, t_done)) in enumerate(zip(ax, tasks)):
-    a.imshow(img, cmap='gray', extent=ext)
-    NUM[f'heuristics_{lbl}'] = {}
-    for h in ['euclidean', 'manhattan']:
-        pl = planner(TRAJECTORY_PLANNER, A.map, heuristic=h); pl.initTrajectoryPlanner()
-        xy = np.array(pl.trajectory_planner(start, goal))
-        L = float(np.hypot(*np.diff(xy, axis=0).T).sum())
-        # time to completion only exists for the heuristic the robot drove (Euclidean); Manhattan was planned, not driven
-        done = round(t_done, 1) if h == 'euclidean' else None
-        a.plot(xy[:, 0], xy[:, 1], color=HC[h], lw=1.2, ls='-' if h == 'euclidean' else '--',
-               label=f'{h.capitalize()}: {L:.2f} m, ' + (f'driven in {done:.0f} s' if done else 'not driven'))
-        NUM[f'heuristics_{lbl}'][h] = dict(path_len_m=round(L, 2), cells=len(xy), time_to_completion_s=done)
-        if h == 'euclidean':   # sanity check: same planner + map + sigma should reproduce the path logged in lab
-            NUM[f'heuristics_{lbl}']['matches_logged_path'] = bool(len(xy) == len(logged) and np.allclose(xy, logged[['x', 'y']].values, atol=1e-6))
-    a.plot(*start, 'o', color='tab:green', ms=3); a.plot(*goal, 'x', color='k', ms=5, mew=1.5)
-    a.set_title(f'({"ab"[k]}) Start/goal of run {lbl}', loc='left'); a.set_aspect('equal'); a.set(xlim=A.xlim, ylim=A.ylim, xlabel='x [m]', ylabel='y [m]')
-    a.legend(loc='lower left', fontsize=5.5)
-os.chdir(cwd)
-fig.tight_layout(); fig.savefig(f'{A.out}/fig_heuristics.pdf'); plt.close(fig)
 
-json.dump(NUM, open(f'{A.out}/numbers.json', 'w'), indent=1)
-print(json.dumps(NUM, indent=1))
+def plot_figure(fig, filename):
+    fig.savefig(filename, dpi=180)
+    plt.close(fig)
+
+
+def distance_to_path(points, route):
+    """Measure distance to the closest point on the path polyline."""
+    steps = np.diff(route, axis=0)
+    relative = points[:, None, :] - route[None, :-1, :]
+    projection = np.clip(np.einsum("nsi,si->ns", relative, steps) / (steps**2).sum(axis=1), 0, 1)
+    return np.linalg.norm(relative - projection[..., None] * steps, axis=2).min(axis=1)
+
+
+def measure_run(pose_file):
+    name = pose_file.name.removesuffix("_pose.csv")
+    path_log = load_log(pose_file.with_name(f"{name}_path.csv"))
+    if path_log["goal"].nunique() != 1:
+        raise ValueError(f"Expected exactly one logged goal for {name}")
+
+    route = path_log[["x", "y"]].to_numpy()
+    if len(route) < 2:
+        raise ValueError(f"Expected at least two planned waypoints in {name}")
+
+    pose = load_log(pose_file)
+    linear = load_log(pose_file.with_name(f"{name}_linear.csv"))
+    command_stamp = linear["stamp"].iloc[0]
+    active = pose.loc[pose["stamp"] >= command_stamp]
+    ekf = active[["kf_x", "kf_y"]].to_numpy()
+    arrival = np.flatnonzero(np.linalg.norm(ekf - route[-1], axis=1) < GOAL_RADIUS_M)
+    if not arrival.size:
+        raise ValueError(f"No EKF sample reached the goal in {name}")
+
+    active = active.iloc[:arrival[0] + 1]
+    ekf = active[["kf_x", "kf_y"]].to_numpy()
+    odom = active[["odom_x", "odom_y"]].to_numpy()
+
+    steps = np.diff(route, axis=0)
+    ekf_cross_track = distance_to_path(ekf, route)
+    odom_cross_track = distance_to_path(odom, route)
+
+    return route, ekf, odom, {
+        "time_to_goal_s": round(float(active["stamp"].iloc[-1] - command_stamp) / 1e9, 2),
+        "path_len_m": round(float(np.linalg.norm(steps, axis=1).sum()), 2),
+        "path_cells": len(route),
+        "start": route[0].round(2).tolist(),
+        "goal": route[-1].round(2).tolist(),
+        "final_ekf_position": ekf[-1].round(4).tolist(),
+        "final_odom_to_goal_m": round(float(np.linalg.norm(odom[-1] - route[-1])), 4),
+        "final_ekf_to_goal_m": round(float(np.linalg.norm(ekf[-1] - route[-1])), 4),
+        "max_ekf_odom_gap_m": round(float(np.linalg.norm(ekf - odom, axis=1).max()), 4),
+        "mean_ekf_cross_track_m": round(float(ekf_cross_track.mean()), 4),
+        "mean_odom_cross_track_m": round(float(odom_cross_track.mean()), 4),
+        "rms_ekf_cross_track_m": round(float(np.sqrt(np.mean(ekf_cross_track**2))), 4),
+        "max_ekf_cross_track_m": round(float(ekf_cross_track.max()), 4),
+    }
+
+
+def gaussian_cost(clearance, sigma):
+    return np.exp(-0.5 * (clearance / sigma)**2)
+
+
+def replan(route, clearance, cost, origin, resolution, heuristic):
+    # The logged endpoints are already cell centers. Round after converting
+    # back to indices to avoid assigning a boundary to its adjacent cell.
+    height = clearance.shape[0]
+    endpoints = np.rint((route[[0, -1]] - origin) / resolution).astype(int)
+    endpoints[:, 1] = height - endpoints[:, 1]
+    cells = search(cost, *endpoints, heuristic)
+    if cells is None:
+        raise ValueError(f"{heuristic} found no path between the logged endpoints")
+
+    x, y = np.array(cells).T
+    xy = origin + resolution * np.column_stack((x, height - y))
+    steps = np.hypot(np.diff(x), np.diff(y))
+    wall_distance = clearance[y, x]
+    return xy, {
+        "path_len_m": round(float(steps.sum() * resolution), 2),
+        "cells": len(cells),
+        "path_cost": round(float(steps.sum() + cost[y[1:], x[1:]].sum()), 3),
+        "min_wall_clearance_m": round(float(wall_distance.min()), 3),
+        "mean_wall_clearance_m": round(float(wall_distance.mean()), 3),
+    }
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("runs", type=Path)
+    parser.add_argument("out", type=Path)
+    parser.add_argument("--map", type=Path, default=Path("room"))
+    parser.add_argument("--laser_sig", type=float, default=0.4)
+    parser.add_argument("--keep", nargs="+", default=["165419", "170619"])
+    parser.add_argument("--xlim", type=float, nargs=2, default=[-1.5, 7.5])
+    parser.add_argument("--ylim", type=float, nargs=2, default=[-2.5, 3.5])
+    args = parser.parse_args()
+    if args.laser_sig <= 0:
+        parser.error("--laser_sig must be positive")
+
+    plt.rcParams.update({
+        "font.size": 8,
+        "axes.titlesize": 8.5,
+        "axes.labelsize": 8,
+        "axes.linewidth": 0.65,
+        "axes.axisbelow": True,
+        "legend.fontsize": 7,
+        "legend.frameon": False,
+        "pdf.fonttype": 42,
+    })
+    args.out.mkdir(parents=True, exist_ok=True)
+
+    image, resolution, origin, extent = read_map(args.map)
+    clearance = distance_transform_edt(image >= 10) * resolution
+    cost = gaussian_cost(clearance, args.laser_sig)
+    baseline_sigma = 0.3
+    baseline_cost = gaussian_cost(clearance, baseline_sigma)
+    numbers = {
+        "laser_sig": args.laser_sig,
+        "blocked_radius_m": round(float(np.sqrt(-2 * np.log(BLOCKED_COST)) * args.laser_sig), 3),
+        "goal_tolerance_m": GOAL_RADIUS_M,
+        "comparison_laser_sig": baseline_sigma,
+    }
+
+    fig, axes = plt.subplots(1, 2, figsize=(7.1, 2.45), layout="constrained")
+    plot_map(axes[0], image, extent, "(a) SLAM occupancy map", cmap="gray", vmin=0, vmax=254)
+    raster = plot_map(axes[1], cost, extent, rf"(b) A* cost map ($\sigma={args.laser_sig:g}$ m)",
+                      cmap="magma_r", vmin=0, vmax=1)
+    axes[1].contour(cost, levels=[BLOCKED_COST], colors=["#1398cc"], linewidths=0.55,
+                    origin="upper", extent=extent)
+    fig.colorbar(raster, ax=axes[1], label="Cell cost", shrink=0.86, pad=0.025)
+    plot_figure(fig, args.out / "fig_map.pdf")
+
+    count = len(args.keep)
+    run_fig, (run_axes,) = plt.subplots(1, count, figsize=(7.1, 2.85), squeeze=False)
+    plan_fig, (plan_axes,) = plt.subplots(1, count, figsize=(7.1, 2.85), squeeze=False)
+    for index, (run_id, run_ax, plan_ax) in enumerate(zip(args.keep, run_axes, plan_axes)):
+        candidates = list(args.runs.glob(f"*{run_id}*_pose.csv"))
+        if len(candidates) != 1:
+            raise ValueError(f"Expected one pose log for {run_id}, found {len(candidates)}")
+        pose_file = candidates[0]
+        name = pose_file.name.removesuffix("_pose.csv")
+        route, ekf, odom, metrics = measure_run(pose_file)
+        numbers[name] = metrics
+
+        panel = chr(ord("a") + index)
+        title = f"({panel}) Run {run_id}"
+        plot_map(run_ax, image, extent, title, args.xlim, args.ylim, cmap="gray", vmin=0, vmax=254)
+        run_ax.plot(*route.T, "--", color=PLAN, lw=1.15, label="Planned path")
+        run_ax.plot(*odom.T, color=ODOM, lw=0.85, label="Odometry")
+        run_ax.plot(*ekf.T, color=EKF, lw=1.1, label="EKF trajectory")
+        run_ax.plot(*ekf[0], "o", color=START, ms=4, label="Tracking start")
+        run_ax.plot(*ekf[-1], "o", mfc="none", mec=EKF, ms=7, label="EKF end")
+        run_ax.plot(*route[-1], "x", color=PLAN, ms=4.5, label="Planned goal")
+
+        plot_map(plan_ax, image, extent, title, args.xlim, args.ylim, cmap="gray", vmin=0, vmax=254)
+        comparisons = {}
+        for heuristic, color, style in (("euclidean", PLAN, "-"), ("manhattan", MANHATTAN, "--")):
+            xy, planned = replan(route, clearance, cost, origin, resolution, heuristic)
+            planned["time_to_completion_s"] = metrics["time_to_goal_s"] if heuristic == "euclidean" else None
+            comparisons[heuristic] = planned
+            if heuristic == "euclidean":
+                comparisons["matches_logged_path"] = bool(route.shape == xy.shape and np.allclose(route, xy))
+
+            _, baseline = replan(route, clearance, baseline_cost, origin, resolution, heuristic)
+            planned["comparison_min_wall_clearance_m"] = baseline["min_wall_clearance_m"]
+            plan_ax.plot(*xy.T, style, color=color, lw=1.25, label=heuristic.capitalize())
+
+        numbers[f"heuristics_{run_id}"] = comparisons
+        plan_ax.plot(*route[0], "o", color=START, ms=4, label="Planned start")
+        plan_ax.plot(*route[-1], "x", color=ODOM, ms=5, label="Planned goal")
+
+    for fig, axes, ncol, filename in (
+        (run_fig, run_axes, 3, "fig_runs.pdf"),
+        (plan_fig, plan_axes, 4, "fig_heuristics.pdf"),
+    ):
+        handles, labels = axes[0].get_legend_handles_labels()
+        fig.legend(handles, labels, loc="lower center", ncol=ncol)
+        fig.tight_layout(rect=(0, 0.14, 1, 1), w_pad=1.35)
+        plot_figure(fig, args.out / filename)
+
+    (args.out / "numbers.json").write_text(json.dumps(numbers, indent=2) + "\n")
+
+
+if __name__ == "__main__":
+    main()

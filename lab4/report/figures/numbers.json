@@ -1,62 +1,96 @@
 {
- "laser_sig": 0.4,
- "blocked_radius_m": 0.267,
- "20261125-165419_euclidean_ekf": {
-  "time_to_goal_s": 289.0,
-  "path_len_m": 3.45,
-  "path_cells": 55,
-  "start": [
-   -0.04,
-   -0.01
-  ],
-  "goal": [
-   2.31,
-   2.14
-  ],
-  "final_odom_to_goal_m": 0.012,
-  "final_ekf_to_goal_m": 0.042,
-  "max_ekf_odom_gap_m": 0.06
- },
- "20261125-170619_euclidean_ekf": {
-  "time_to_goal_s": 77.1,
-  "path_len_m": 6.34,
-  "path_cells": 105,
-  "start": [
-   -0.04,
-   -0.01
-  ],
-  "goal": [
-   5.16,
-   -0.56
-  ],
-  "final_odom_to_goal_m": 0.014,
-  "final_ekf_to_goal_m": 0.04,
-  "max_ekf_odom_gap_m": 0.045
- },
- "heuristics_165419": {
-  "euclidean": {
-   "path_len_m": 3.45,
-   "cells": 55,
-   "time_to_completion_s": 289.0
+  "laser_sig": 0.4,
+  "blocked_radius_m": 0.267,
+  "goal_tolerance_m": 0.05,
+  "comparison_laser_sig": 0.3,
+  "20261125-165419_euclidean_ekf": {
+    "time_to_goal_s": 40.49,
+    "path_len_m": 3.45,
+    "path_cells": 55,
+    "start": [
+      -0.04,
+      -0.01
+    ],
+    "goal": [
+      2.31,
+      2.14
+    ],
+    "final_ekf_position": [
+      2.2619,
+      2.1411
+    ],
+    "final_odom_to_goal_m": 0.0455,
+    "final_ekf_to_goal_m": 0.0481,
+    "max_ekf_odom_gap_m": 0.0596,
+    "mean_ekf_cross_track_m": 0.0067,
+    "mean_odom_cross_track_m": 0.0203,
+    "rms_ekf_cross_track_m": 0.0133,
+    "max_ekf_cross_track_m": 0.0706
   },
-  "matches_logged_path": true,
-  "manhattan": {
-   "path_len_m": 3.47,
-   "cells": 56,
-   "time_to_completion_s": null
-  }
- },
- "heuristics_170619": {
-  "euclidean": {
-   "path_len_m": 6.34,
-   "cells": 105,
-   "time_to_completion_s": 77.1
+  "heuristics_165419": {
+    "euclidean": {
+      "path_len_m": 3.45,
+      "cells": 55,
+      "path_cost": 96.534,
+      "min_wall_clearance_m": 0.283,
+      "mean_wall_clearance_m": 0.467,
+      "time_to_completion_s": 40.49,
+      "comparison_min_wall_clearance_m": 0.283
+    },
+    "matches_logged_path": true,
+    "manhattan": {
+      "path_len_m": 3.47,
+      "cells": 56,
+      "path_cost": 97.062,
+      "min_wall_clearance_m": 0.283,
+      "mean_wall_clearance_m": 0.474,
+      "time_to_completion_s": null,
+      "comparison_min_wall_clearance_m": 0.212
+    }
   },
-  "matches_logged_path": true,
-  "manhattan": {
-   "path_len_m": 6.34,
-   "cells": 105,
-   "time_to_completion_s": null
+  "20261125-170619_euclidean_ekf": {
+    "time_to_goal_s": 67.5,
+    "path_len_m": 6.34,
+    "path_cells": 105,
+    "start": [
+      -0.04,
+      -0.01
+    ],
+    "goal": [
+      5.16,
+      -0.56
+    ],
+    "final_ekf_position": [
+      5.1126,
+      -0.5722
+    ],
+    "final_odom_to_goal_m": 0.0211,
+    "final_ekf_to_goal_m": 0.049,
+    "max_ekf_odom_gap_m": 0.0452,
+    "mean_ekf_cross_track_m": 0.0066,
+    "mean_odom_cross_track_m": 0.0117,
+    "rms_ekf_cross_track_m": 0.0092,
+    "max_ekf_cross_track_m": 0.0383
+  },
+  "heuristics_170619": {
+    "euclidean": {
+      "path_len_m": 6.34,
+      "cells": 105,
+      "path_cost": 175.585,
+      "min_wall_clearance_m": 0.283,
+      "mean_wall_clearance_m": 0.505,
+      "time_to_completion_s": 67.5,
+      "comparison_min_wall_clearance_m": 0.212
+    },
+    "matches_logged_path": true,
+    "manhattan": {
+      "path_len_m": 6.34,
+      "cells": 105,
+      "path_cost": 178.529,
+      "min_wall_clearance_m": 0.283,
+      "mean_wall_clearance_m": 0.481,
+      "time_to_completion_s": null,
+      "comparison_min_wall_clearance_m": 0.212
+    }
   }
- }
 }
